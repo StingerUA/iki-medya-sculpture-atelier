@@ -1,0 +1,10 @@
+import { ArrowUpRight, Minus, Plus, X } from "lucide-react";
+import { Link } from "wouter";
+import { useQuoteCart } from "@/contexts/QuoteCartContext";
+import SculptureArt from "./SculptureArt";
+
+export default function CartDrawer() {
+  const { items, isOpen, closeCart, removeItem, updateQuantity } = useQuoteCart();
+  if (!isOpen) return null;
+  return <div className="cart-layer" role="dialog" aria-modal="true" aria-label="Your project list"><button className="cart-layer__backdrop" aria-label="Close project list" onClick={closeCart} /><aside className="cart-drawer"><div className="cart-drawer__head"><div><p className="eyebrow">Project list</p><h2>Your selected works</h2></div><button className="icon-button" onClick={closeCart} aria-label="Close project list"><X size={20} /></button></div><div className="cart-drawer__body">{items.length === 0 ? <div className="drawer-empty"><p>Your project list is empty.</p><span>Choose a work to start a custom enquiry.</span><Link href="/collection" onClick={closeCart} className="text-link">Explore collection <ArrowUpRight size={16} /></Link></div> : <ul className="cart-items">{items.map(item => <li key={item.id} className="cart-item"><SculptureArt visual={item.visual} className="cart-item__art" /><div><p className="eyebrow">No. {item.index}</p><h3>{item.title}</h3><div className="quantity-control"><button onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label={`Decrease ${item.title}`}><Minus size={12} /></button><span>{String(item.quantity).padStart(2, "0")}</span><button onClick={() => updateQuantity(item.id, item.quantity + 1)} aria-label={`Increase ${item.title}`}><Plus size={12} /></button></div></div><button className="icon-button icon-button--small" onClick={() => removeItem(item.id)} aria-label={`Remove ${item.title}`}><X size={15} /></button></li>)}</ul>}</div><div className="cart-drawer__footer"><p>Pricing, lead time and installation are confirmed after reviewing your brief.</p><Link href="/contact?enquiry=project-list" onClick={closeCart} className="button button--dark button--full">Request a proposal <ArrowUpRight size={17} /></Link></div></aside></div>;
+}

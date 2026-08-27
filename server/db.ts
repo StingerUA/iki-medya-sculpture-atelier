@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertProjectEnquiry, InsertUser, projectEnquiries, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,8 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function createProjectEnquiry(enquiry: InsertProjectEnquiry) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.insert(projectEnquiries).values(enquiry);
+}

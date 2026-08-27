@@ -1,33 +1,5 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Workflow, Frontend Best Practices, Design Guide and Common Pitfalls
- */
-export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
-
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
-  );
-}
+import { ArrowDown, ArrowUpRight, ScanLine } from "lucide-react";
+import { Link } from "wouter";
+import { sculptures } from "@shared/catalog";
+import SculptureArt from "@/components/SculptureArt";
+export default function Home() { return <main><section className="home-hero"><div className="home-hero__copy"><p className="eyebrow">Sculpture Atelier by İki Medya</p><h1>Form,<br /><em>on a larger</em><br />scale.</h1><p>Spatial objects configured for the settings they inhabit — from a quiet entrance to a defining public interior.</p><Link href="/collection" className="button button--light">Explore the collection <ArrowUpRight size={17} /></Link></div><div className="home-hero__visual"><span className="hero-index">01 — 03</span><SculptureArt visual="arch" className="home-hero__art" inverse /><span className="hero-scroll"><ArrowDown size={16} />Scroll to discover</span></div></section><section className="intro-band"><p className="eyebrow">A spatial direction by İki Medya</p><h2>Individual forms for <em>intentional</em> spaces.</h2><div><p>Sculpture Atelier translates İki Medya’s client-specific approach into a focused collection of large-format forms. Every commission begins with the character of the place it will inhabit.</p><Link href="/about" className="text-link">About the studio <ArrowUpRight size={17} /></Link></div></section><section className="home-feature"><div className="home-feature__intro"><p className="eyebrow">Collection studies</p><h2>Material<br />presence.</h2><Link href="/collection" className="text-link">View all works <ArrowUpRight size={17} /></Link></div><div className="home-feature__cards">{sculptures.slice(0, 2).map(sculpture => <Link href={`/sculptures/${sculpture.slug}`} key={sculpture.id} className="feature-card"><SculptureArt visual={sculpture.visual} className="feature-card__art" /><div><span>No. {sculpture.index}</span><h3>{sculpture.title}</h3><ArrowUpRight size={18} /></div></Link>)}</div></section><section className="ar-teaser"><div><p className="eyebrow">AR-ready pages</p><h2>Consider a work<br />in its <em>real</em> setting.</h2><p>For selected commissions, an approved 3D model can be viewed in context before production — directly from the individual work page.</p><Link href="/process" className="button button--dark">How it works <ArrowUpRight size={17} /></Link></div><div className="ar-teaser__device"><span className="ar-teaser__frame"><SculptureArt visual="loop" className="ar-teaser__art" /><span><ScanLine size={23} /> AR ready</span></span></div></section></main>; }
