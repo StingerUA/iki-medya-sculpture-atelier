@@ -1,0 +1,69 @@
+name: Import open sculpture assets
+
+on:
+  push:
+    branches:
+      - feat/open-sculpture-models
+    paths:
+      - .github/workflows/import-open-sculpture-assets.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-assets:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/open-sculpture-models
+
+      - name: Download and verify pinned GLB assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p client/public/models
+
+          download_and_verify() {
+            local url="$1"
+            local output="$2"
+            local expected_blob="$3"
+            curl --fail --location --retry 3 --silent --show-error "$url" --output "$output"
+            local actual_blob
+            actual_blob="$(git hash-object "$output")"
+            if [[ "$actual_blob" != "$expected_blob" ]]; then
+              echo "Blob verification failed for $output" >&2
+              echo "Expected: $expected_blob" >&2
+              echo "Actual:   $actual_blob" >&2
+              exit 1
+            fi
+          }
+
+          download_and_verify \
+            "https://raw.githubusercontent.com/mrdoob/three.js/3744db754b77106a4b2921fcc0a77f0964b823a7/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb" \
+            "client/public/models/lee-perry-smith.glb" \
+            "cff335de726fa518c1ef80f4c8aa540037b2f5b2"
+
+          download_and_verify \
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/2d97dcc2463db123ed5203598cffedf8b6cf1683/Models/ScatteringSkull/glTF-Binary/ScatteringSkull.glb" \
+            "client/public/models/scattering-skull.glb" \
+            "9e1927babc5791067ccf2004bda7e59a40cac753"
+
+          download_and_verify \
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/2d97dcc2463db123ed5203598cffedf8b6cf1683/Models/IridescenceSuzanne/glTF-Binary/IridescenceSuzanne.glb" \
+            "client/public/models/iridescence-suzanne.glb" \
+            "1d1d591cf59f99f1c7ec0268c5a5556a6f229857"
+
+      - name: Commit imported assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/import-open-sculpture-assets.yml
+          git add client/public/models
+          git commit -m "Add verified open-licensed sculpture model assets"
+          git push origin HEAD:feat/open-sculpture-models
