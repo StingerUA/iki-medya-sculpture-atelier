@@ -22,3 +22,8 @@
 ## Контентные ограничения
 
 На просмотренных страницах нет проверенного портфолио скульптур, продуктовых спецификаций, фотографий изделий, цен или 3D-файлов. До добавления данных владельцем витрина не должна выдавать искусственно сгенерированные характеристики за реальный каталог или публиковать отзывы/рейтинги.
+
+
+## Açık lisanslı referans modeller
+
+28 Ağustos 2026 tarihinde üç açık lisanslı GLB model katalog ve AR testi için eklendi. Bu modeller kaynak, üretici ve lisans bilgileri görünür biçimde gösterilen üretim referanslarıdır; İki Medya'nın tamamlanmış portfolyo işleri veya mevcut stok ürünleri olarak sunulmaz. Gerçek baskı ölçüsü, malzemesi, yüzeyi, fiyatı ve üretilebilirliği teklif öncesinde ayrıca doğrulanır.
