@@ -1,0 +1,20 @@
+name: Export site source
+
+on:
+  push:
+    branches:
+      - chore/export-site-source
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package source for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: sculpture-atelier-source
+          path: .
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
