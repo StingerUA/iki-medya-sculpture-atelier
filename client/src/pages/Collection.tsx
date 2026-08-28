@@ -21,7 +21,7 @@ export default function Collection() {
       <section className="page-intro">
         <p className="eyebrow">Koleksiyon çalışmaları</p>
         <h1>Mekânın <em>ölçeği</em> için tasarlandı.</h1>
-        <p>Özgün stüdyo konseptleri ile kaynağı ve lisansı doğrulanmış açık modeller, farklı ölçek ve yüzey seçenekleri için bir araya geliyor.</p>
+        <p>Kaynağı ve lisansı doğrulanmış üç açık model, farklı ölçek ve yüzey seçenekleriyle koleksiyonda sunuluyor.</p>
       </section>
 
       <section className="mb-12 border-y border-[#bdbdb7] py-4" aria-label="Koleksiyon filtreleri">
