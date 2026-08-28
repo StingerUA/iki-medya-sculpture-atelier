@@ -33,3 +33,7 @@
 - [x] Сохранить новый checkpoint с турецкой локализацией и расширенной товарной страницей перед публикацией.
 - [x] Добавить к одной карточке явно обозначенные тестовые GLB и USDZ модели для проверки AR.
 - [x] Проверить загрузку тестовой AR-модели, fallback, TypeScript, Vitest и production-сборку.
+
+- [x] Kaynağı ve ticari kullanıma uygun lisansı doğrulanmış üç açık 3D modeli yerel GLB dosyalarıyla kataloğa ve AR önizlemesine eklemek.
+- [x] Açık modelleri gerçek stüdyo portfolyosundan ayırmak; kaynak, üretici ve lisans atfını ürün detayında görünür tutmak.
+- [x] Açık model dosyalarının varlığını, TypeScript'i, Vitest testlerini ve production build'i GitHub Actions ile doğrulamak.
