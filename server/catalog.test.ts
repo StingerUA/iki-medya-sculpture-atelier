@@ -4,24 +4,28 @@ import { describe, expect, it } from "vitest";
 import { getSculpture, sculptures } from "../shared/catalog";
 
 describe("sunum kataloğu", () => {
-  it("benzersiz bağlantılar sunar ve her çalışmayı yapılandırılabilir tutar", () => {
+  it("yalnızca yeni açık lisanslı heykelleri sıralı ve benzersiz sunar", () => {
+    expect(sculptures.map(sculpture => sculpture.slug)).toEqual([
+      "portrait-04",
+      "skull-05",
+      "iridescence-06",
+    ]);
+    expect(sculptures.map(sculpture => sculpture.index)).toEqual(["01", "02", "03"]);
     expect(new Set(sculptures.map(sculpture => sculpture.slug)).size).toBe(sculptures.length);
     expect(sculptures.every(sculpture => sculpture.dimensions === "Her kurulum için belirlenir")).toBe(true);
-    expect(getSculpture("form-01")?.title).toBe("FORM / 01");
+    expect(sculptures.every(sculpture => sculpture.sourceAsset?.role === "open-catalog")).toBe(true);
+    expect(getSculpture("portrait-04")?.title).toBe("PORTRAIT / 01");
   });
 
-  it("FORM / 01 için açıkça etiketlenmiş GLB ve USDZ test modelleri sunar", () => {
-    const sculpture = getSculpture("form-01");
-    expect(sculpture?.arModelUrl).toMatch(/\.glb$/);
-    expect(sculpture?.arIosModelUrl).toMatch(/\.usdz$/);
-    expect(sculpture?.sourceAsset?.title).toBe("Astronaut");
-    expect(sculpture?.sourceAsset?.role).toBe("technical-demo");
+  it("eski konsept çalışmalarını katalogdan kaldırır", () => {
+    expect(getSculpture("form-01")).toBeUndefined();
+    expect(getSculpture("volume-02")).toBeUndefined();
+    expect(getSculpture("void-03")).toBeUndefined();
   });
 
-  it("üç doğrulanmış açık lisanslı heykel modeli sunar", () => {
-    const openModels = sculptures.filter(sculpture => sculpture.sourceAsset?.role === "open-catalog");
-    expect(openModels).toHaveLength(3);
-    for (const sculpture of openModels) {
+  it("üç doğrulanmış açık lisanslı heykel modelini yerel dosyalarla sunar", () => {
+    expect(sculptures).toHaveLength(3);
+    for (const sculpture of sculptures) {
       expect(sculpture.catalogModelUrl).toBe(sculpture.arModelUrl);
       expect(sculpture.arModelUrl).toMatch(/^\/models\/.*\.glb$/);
       expect(sculpture.arScale).toBe("auto");
