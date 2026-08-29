@@ -39,7 +39,7 @@ jobs:
           pnpm test
 
       - name: Build static storefront
-        run: pnpm exec vite build --base=/sculpture-atelier-store/
+        run: pnpm exec vite build --base=/iki-medya-sculpture-atelier/
 
       - name: Add SPA fallback
         run: |
