@@ -3,11 +3,14 @@ import { createElement, useEffect, useRef, useState } from "react";
 import { AlertCircle, Box, FlaskConical, LoaderCircle, ScanLine } from "lucide-react";
 import type { Sculpture } from "@shared/catalog";
 import { getARPreviewAvailability } from "@shared/arPreview";
+import { withBasePath } from "@/lib/assetUrl";
 
 export default function ARViewer({ sculpture }: { sculpture: Sculpture }) {
   const availability = getARPreviewAvailability(sculpture);
   const modelRef = useRef<HTMLElement | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const modelUrl = withBasePath(sculpture.arModelUrl);
+  const iosModelUrl = withBasePath(sculpture.arIosModelUrl);
 
   useEffect(() => {
     setStatus("loading");
@@ -21,7 +24,7 @@ export default function ARViewer({ sculpture }: { sculpture: Sculpture }) {
       model.removeEventListener("load", onLoad);
       model.removeEventListener("error", onError);
     };
-  }, [availability.available, sculpture.arModelUrl]);
+  }, [availability.available, modelUrl]);
 
   if (!availability.available) return <section className="ar-panel"><div className="ar-panel__icon"><ScanLine size={27} /></div><div><p className="eyebrow">AR önizleme</p><h3>3D model talep üzerine</h3><p>Seçili projeler için stüdyo onaylı GLB/GLTF ve iOS için USDZ modeli sağlanabilir. Uyumlu cihazlarda mekân içi önizleme bu alanda açılır.</p></div></section>;
 
@@ -37,8 +40,8 @@ export default function ARViewer({ sculpture }: { sculpture: Sculpture }) {
     </div>
     {createElement("model-viewer", {
       ref: (node: HTMLElement | null) => { modelRef.current = node; },
-      src: sculpture.arModelUrl,
-      "ios-src": sculpture.arIosModelUrl,
+      src: modelUrl,
+      "ios-src": iosModelUrl,
       alt: sculpture.title + " için 3D model",
       ar: true,
       "ar-modes": "webxr scene-viewer quick-look",
