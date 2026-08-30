@@ -97,9 +97,17 @@ const copy = {
 } as const;
 
 const styleLabels: Record<Locale, Record<Product["style"], string>> = {
-  tr: { portrait: "Portre", anatomical: "Anatomik", experimental: "Deneysel" },
-  en: { portrait: "Portrait", anatomical: "Anatomical", experimental: "Experimental" },
+  tr: { portrait: "Portre", anatomical: "Anatomik", experimental: "Deneysel", vase: "Vazo", decorative: "Dekoratif heykel" },
+  en: { portrait: "Portrait", anatomical: "Anatomical", experimental: "Experimental", vase: "Vase", decorative: "Decorative statue" },
 };
+
+const modelBackgrounds = [
+  { id: "studio", label: { tr: "Açık stüdyo", en: "Light studio" } },
+  { id: "stone", label: { tr: "Taş zemin", en: "Stone setting" } },
+  { id: "night", label: { tr: "Koyu galeri", en: "Dark gallery" } },
+] as const;
+
+type ModelBackground = (typeof modelBackgrounds)[number]["id"];
 
 function apiUrl(path: string) {
   const base = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "";
@@ -250,7 +258,7 @@ function SiteHeader({ locale, currentPath, navigate, cartCount, onCart, onAuth, 
 function HomeView({ locale, navigate, onAdd }: { locale: Locale; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
   return <>
-    <section className="hero-section"><div className="hero-copy"><p className="eyebrow">{t.heroKicker}</p><h1>{t.heroTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><p className="hero-text">{t.heroText}</p><div className="hero-buttons"><Button className="square-button" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ArrowRight /></Button><Button variant="outline" className="square-button" onClick={() => navigate(pathFor(locale, "contact"))}>{t.custom}</Button></div></div><div className="hero-art"><ModelPreview src={products[2].model} alt={products[2].name} className="hero-model" /><div className="hero-art-label"><Scan />{t.arReady}</div></div></section>
+    <section className="hero-section"><div className="hero-copy"><p className="eyebrow">{t.heroKicker}</p><h1>{t.heroTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><p className="hero-text">{t.heroText}</p><div className="hero-buttons"><Button className="square-button" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ArrowRight /></Button><Button variant="outline" className="square-button" onClick={() => navigate(pathFor(locale, "contact"))}>{t.custom}</Button></div></div><div className="hero-art"><ModelPreview src={products[2].model} alt={products[2].name} className="hero-model" locale={locale} /><div className="hero-art-label"><Scan />{t.arReady}</div></div></section>
     <section className="collection-preview section-pad"><div className="section-heading"><div><p className="eyebrow">01 / {t.collection}</p><h2>{t.collection}</h2></div><p>{t.collectionText}</p></div><div className="featured-grid">{products.slice(0, 3).map((product, index) => <ProductCard key={product.slug} product={product} locale={locale} index={index + 1} navigate={navigate} onAdd={onAdd} />)}</div><button className="wide-link" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ChevronRight /></button></section>
     <section className="process-section section-pad"><p className="eyebrow">02 / {t.process}</p><div className="process-grid">{t.steps.map((step, index) => <article key={step}><span>0{index + 1}</span><h3>{step}</h3><p>{t.processText[index]}</p></article>)}</div></section>
   </>;
@@ -270,13 +278,13 @@ function CatalogView({ locale, navigate, onAdd }: { locale: Locale; navigate: (p
 
 function ProductCard({ product, locale, index, navigate, onAdd }: { product: Product; locale: Locale; index: number; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
-  return <article className="product-card"><button className="product-image" onClick={() => navigate(productPath(locale, product.slug))} aria-label={`${t.details}: ${product.name}`}><ModelPreview src={product.model} alt={product.name} className="card-model" /><span className="product-index">{index.toString().padStart(2, "0")}</span><span className="ar-badge"><Scan />AR</span></button><div className="product-meta"><div><p>{styleLabels[locale][product.style]} / {product.height} cm</p><h3>{product.name}</h3></div><strong>{formatPrice(product.price, locale)}</strong></div><div className="product-actions"><Button variant="outline" className="square-button" onClick={() => navigate(productPath(locale, product.slug))}>{t.details}</Button><Button className="square-button" onClick={() => onAdd(product.slug)}>{t.add}<Plus /></Button></div></article>;
+  return <article className="product-card"><div className="product-image"><ModelPreview src={product.model} alt={product.name} className="card-model" locale={locale} /><span className="product-index">{index.toString().padStart(2, "0")}</span><span className="ar-badge"><Scan />AR</span></div><div className="product-meta"><div><p>{styleLabels[locale][product.style]} / {product.height} cm</p><h3>{product.name}</h3></div><strong>{formatPrice(product.price, locale)}</strong></div><div className="product-actions"><Button variant="outline" className="square-button" onClick={() => navigate(productPath(locale, product.slug))}>{t.details}</Button><Button className="square-button" onClick={() => onAdd(product.slug)}>{t.add}<Plus /></Button></div></article>;
 }
 
 function ProductView({ locale, product, navigate, onAdd }: { locale: Locale; product: Product; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
   const specs = [[t.dimensions, `${product.height} cm`], [t.material, product.material], [t.finish, product.color], [t.leadTime, product.leadTime]];
-  return <section className="product-page section-pad"><button className="back-link" onClick={() => navigate(pathFor(locale, "catalog"))}>← {t.catalog}</button><div className="product-detail-grid"><div className="detail-image"><ModelPreview src={product.model} alt={product.name} className="detail-model" /><span className="ar-badge"><Scan />AR</span></div><div className="detail-copy"><p className="eyebrow">{styleLabels[locale][product.style]} / {product.height} cm</p><h1>{product.name}</h1><p className="detail-price">{formatPrice(product.price, locale)}</p><p className="detail-description">{product.description[locale]}</p><Button className="square-button add-large" onClick={() => onAdd(product.slug)}>{t.add}<ShoppingBag /></Button><div className="spec-list"><p className="eyebrow">{t.specs}</p>{specs.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></div></div><div className="ar-section"><div><p className="eyebrow">03 / AR</p><h2>{t.arTitle}</h2><p>{t.arText}</p><p className="model-source"><span>{t.modelSource}</span><a href={product.source.sourceUrl} target="_blank" rel="noreferrer">{product.source.title}</a><small>{product.source.creator} · <a href={product.source.licenseUrl} target="_blank" rel="noreferrer">{product.source.licenseName}</a></small></p></div><ModelViewer src={product.model} alt={product.name} arLabel={locale === "tr" ? "AR'da Gör" : "View in AR"} /></div></section>;
+  return <section className="product-page section-pad"><button className="back-link" onClick={() => navigate(pathFor(locale, "catalog"))}>← {t.catalog}</button><div className="product-detail-grid"><div className="detail-image"><ModelPreview src={product.model} alt={product.name} className="detail-model" locale={locale} /><span className="ar-badge"><Scan />AR</span></div><div className="detail-copy"><p className="eyebrow">{styleLabels[locale][product.style]} / {product.height} cm</p><h1>{product.name}</h1><p className="detail-price">{formatPrice(product.price, locale)}</p><p className="detail-description">{product.description[locale]}</p><Button className="square-button add-large" onClick={() => onAdd(product.slug)}>{t.add}<ShoppingBag /></Button><div className="spec-list"><p className="eyebrow">{t.specs}</p>{specs.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></div></div><div className="ar-section"><div><p className="eyebrow">03 / AR</p><h2>{t.arTitle}</h2><p>{t.arText}</p><p className="model-source"><span>{t.modelSource}</span><a href={product.source.sourceUrl} target="_blank" rel="noreferrer">{product.source.title}</a><small>{product.source.creator} · <a href={product.source.licenseUrl} target="_blank" rel="noreferrer">{product.source.licenseName}</a></small></p></div><ModelViewer src={product.model} alt={product.name} arLabel={locale === "tr" ? "AR'da Gör" : "View in AR"} locale={locale} /></div></section>;
 }
 
 function useModelViewerScript() {
@@ -287,19 +295,52 @@ function useModelViewerScript() {
   }, []);
 }
 
-function ModelPreview({ src, alt, className }: { src: string; alt: string; className: string }) {
+function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string }) {
   useModelViewerScript();
-  return React.createElement("model-viewer", { src, alt, "auto-rotate": true, "rotation-per-second": "14deg", "interaction-prompt": "none", "shadow-intensity": "1", "environment-image": "neutral", className });
+  const [background, setBackground] = React.useState<ModelBackground>("studio");
+  const viewer = React.createElement(
+    "model-viewer",
+    {
+      src,
+      alt,
+      ar,
+      "ar-modes": ar ? "webxr scene-viewer quick-look" : undefined,
+      "ar-scale": ar ? "auto" : undefined,
+      "camera-controls": true,
+      "auto-rotate": true,
+      "rotation-per-second": "14deg",
+      "interaction-prompt": "auto",
+      "shadow-intensity": "1.15",
+      "shadow-softness": "0.8",
+      "environment-image": "neutral",
+      "min-camera-orbit": "auto auto 45%",
+      "max-camera-orbit": "auto auto 260%",
+      style: { touchAction: "pan-y" },
+      className,
+    },
+    ar && arLabel ? React.createElement("button", { slot: "ar-button", className: "ar-button" }, React.createElement(Scan), arLabel) : undefined,
+  );
+
+  return <div className={`model-stage ${className}-stage model-stage--${background}`}>
+    {viewer}
+    <div className="model-background-switcher" role="group" aria-label={locale === "tr" ? "Model arka planı" : "Model background"}>
+      {modelBackgrounds.map((option) => <button key={option.id} type="button" className={`background-swatch background-swatch--${option.id}`} aria-label={option.label[locale]} title={option.label[locale]} aria-pressed={background === option.id} onClick={() => setBackground(option.id)}><span /></button>)}
+    </div>
+    <span className="model-interaction-hint">{locale === "tr" ? "Döndür · Yakınlaştır" : "Rotate · Zoom"}</span>
+  </div>;
 }
 
-function ModelViewer({ src, alt, arLabel }: { src: string; alt: string; arLabel: string }) {
-  useModelViewerScript();
-  return React.createElement("model-viewer", { src, alt, ar: true, "ar-modes": "webxr scene-viewer quick-look", "ar-scale": "auto", "camera-controls": true, "auto-rotate": true, "shadow-intensity": "1", "environment-image": "neutral", className: "model-viewer" }, React.createElement("button", { slot: "ar-button", className: "ar-button" }, React.createElement(Scan), arLabel));
+function ModelPreview({ src, alt, className, locale }: { src: string; alt: string; className: string; locale: Locale }) {
+  return <ModelStage src={src} alt={alt} className={className} locale={locale} />;
+}
+
+function ModelViewer({ src, alt, arLabel, locale }: { src: string; alt: string; arLabel: string; locale: Locale }) {
+  return <ModelStage src={src} alt={alt} className="model-viewer" locale={locale} ar arLabel={arLabel} />;
 }
 
 function AboutView({ locale }: { locale: Locale }) {
   const t = copy[locale];
-  return <section className="editorial-page section-pad"><p className="eyebrow">02 / {t.about}</p><h1>{t.aboutTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><div className="editorial-columns"><p>{t.aboutText}</p><aside><span>İKİ MEDYA / 2026</span><strong>{t.aboutNote}</strong></aside></div><div className="about-image"><ModelPreview src={products[1].model} alt={products[1].name} className="about-model" /></div></section>;
+  return <section className="editorial-page section-pad"><p className="eyebrow">02 / {t.about}</p><h1>{t.aboutTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><div className="editorial-columns"><p>{t.aboutText}</p><aside><span>İKİ MEDYA / 2026</span><strong>{t.aboutNote}</strong></aside></div><div className="about-image"><ModelPreview src={products[1].model} alt={products[1].name} className="about-model" locale={locale} /></div></section>;
 }
 
 function ContactView({ locale }: { locale: Locale }) {
@@ -323,7 +364,7 @@ function CartDrawer({ locale, open, onOpen, cart, setCart, navigate }: { locale:
   const message = [locale === "tr" ? "Merhaba, aşağıdaki heykeller için sipariş teklifi almak istiyorum:" : "Hello, I would like an order quote for the following sculptures:", "", ...lines.map((line) => `• ${line.product.name} × ${line.quantity} — ${formatPrice(line.product.price * line.quantity, locale)}`), "", `${t.total}: ${formatPrice(total, locale)}`, locale === "tr" ? "Lütfen üretim ve teslimat detaylarını paylaşır mısınız?" : "Please share production and delivery details."].join("\n");
   const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
   const whatsapp = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-  return <Sheet open={open} onOpenChange={onOpen}><SheetContent className="cart-sheet"><SheetHeader><SheetTitle>{t.cartTitle}</SheetTitle><SheetDescription>{t.cartDescription}</SheetDescription></SheetHeader><div className="cart-lines">{lines.length ? lines.map((line) => <div className="cart-line" key={line.slug}><ModelPreview src={line.product.model} alt={line.product.name} className="cart-model" /><div><strong>{line.product.name}</strong><span>{formatPrice(line.product.price, locale)}</span><div className="quantity"><button onClick={() => update(line.slug, line.quantity - 1)} aria-label="Decrease"><Minus /></button><span>{line.quantity}</span><button onClick={() => update(line.slug, line.quantity + 1)} aria-label="Increase"><Plus /></button><button onClick={() => update(line.slug, 0)} aria-label="Remove"><Trash2 /></button></div></div></div>) : <div className="empty-cart"><ShoppingBag /><p>{t.emptyCart}</p><Button variant="outline" className="square-button" onClick={() => { onOpen(false); navigate(pathFor(locale, "catalog")); }}>{t.continueShopping}</Button></div>}</div>{lines.length > 0 && <SheetFooter><div className="cart-total"><span>{t.total}</span><strong>{formatPrice(total, locale)}</strong></div><Button asChild className="square-button whatsapp-button"><a href={whatsapp} target="_blank" rel="noreferrer">{t.orderWhatsapp}<ArrowRight /></a></Button><p className="cart-note">{t.cartDescription}</p></SheetFooter>}</SheetContent></Sheet>;
+  return <Sheet open={open} onOpenChange={onOpen}><SheetContent className="cart-sheet"><SheetHeader><SheetTitle>{t.cartTitle}</SheetTitle><SheetDescription>{t.cartDescription}</SheetDescription></SheetHeader><div className="cart-lines">{lines.length ? lines.map((line) => <div className="cart-line" key={line.slug}><ModelPreview src={line.product.model} alt={line.product.name} className="cart-model" locale={locale} /><div><strong>{line.product.name}</strong><span>{formatPrice(line.product.price, locale)}</span><div className="quantity"><button onClick={() => update(line.slug, line.quantity - 1)} aria-label="Decrease"><Minus /></button><span>{line.quantity}</span><button onClick={() => update(line.slug, line.quantity + 1)} aria-label="Increase"><Plus /></button><button onClick={() => update(line.slug, 0)} aria-label="Remove"><Trash2 /></button></div></div></div>) : <div className="empty-cart"><ShoppingBag /><p>{t.emptyCart}</p><Button variant="outline" className="square-button" onClick={() => { onOpen(false); navigate(pathFor(locale, "catalog")); }}>{t.continueShopping}</Button></div>}</div>{lines.length > 0 && <SheetFooter><div className="cart-total"><span>{t.total}</span><strong>{formatPrice(total, locale)}</strong></div><Button asChild className="square-button whatsapp-button"><a href={whatsapp} target="_blank" rel="noreferrer">{t.orderWhatsapp}<ArrowRight /></a></Button><p className="cart-note">{t.cartDescription}</p></SheetFooter>}</SheetContent></Sheet>;
 }
 
 function AuthModal({ locale, open, onOpen, user, setUser }: { locale: Locale; open: boolean; onOpen: (open: boolean) => void; user: PublicUser | null; setUser: (user: PublicUser | null) => void }) {
