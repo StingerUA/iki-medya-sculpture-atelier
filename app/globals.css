@@ -334,8 +334,9 @@ button { cursor: pointer; }
 .model-source a { width: fit-content; color: inherit; font-weight: 800; text-underline-offset: 3px; }
 .model-source small { color: #666661; line-height: 1.5; }
 .model-viewer { width: 100%; min-height: 650px; }
-.ar-button { position: absolute; right: 20px; bottom: 20px; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border: 1px solid #0a0a0a; background: #0a0a0a; color: #fff; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.ar-button { position: absolute; right: 20px; bottom: 20px; z-index: 6; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border: 1px solid #0a0a0a; background: #0a0a0a; color: #fff; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
 .ar-button svg { width: 16px; }
+.ar-error { position: absolute; right: 20px; bottom: 78px; z-index: 6; max-width: 330px; padding: 10px 12px; border: 1px solid #0a0a0a; background: rgba(244,244,240,.95); color: #0a0a0a; font-size: .68rem; font-weight: 700; line-height: 1.4; }
 .ar-placeholder { min-height: 500px; display: grid; place-items: center; background: #e5e5e1; }
 .ar-placeholder svg { width: 52px; height: 52px; opacity: .4; }
 
@@ -464,6 +465,7 @@ button { cursor: pointer; }
   .background-swatch span { width: 20px; height: 20px; }
   .cart-model-stage .model-background-switcher { top: 4px; bottom: auto; left: 50%; transform: translateX(-50%); }
   .ar-button { right: 12px; bottom: 12px; }
+  .ar-error { right: 12px; bottom: 72px; left: 12px; max-width: none; }
   .model-interaction-hint { display: none; }
   .editorial-page h1, .policy-page h1 { font-size: clamp(3.5rem, 17vw, 6.4rem); }
   .editorial-columns { grid-template-columns: 1fr; gap: 45px; margin-top: 55px; }

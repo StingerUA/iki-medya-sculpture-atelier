@@ -98,8 +98,8 @@ const copy = {
 } as const;
 
 const styleLabels: Record<Locale, Record<Product["style"], string>> = {
-  tr: { portrait: "Portre", anatomical: "Anatomik", experimental: "Deneysel", vase: "Vazo", decorative: "Dekoratif heykel" },
-  en: { portrait: "Portrait", anatomical: "Anatomical", experimental: "Experimental", vase: "Vase", decorative: "Decorative statue" },
+  tr: { ancient: "Antik klasik", modern: "Modern sanat", decorative: "Dekoratif heykel", vase: "Vazo" },
+  en: { ancient: "Ancient classics", modern: "Modern art", decorative: "Decorative sculpture", vase: "Vase" },
 };
 
 const modelBackgrounds = [
@@ -312,17 +312,47 @@ function useModelViewerScript() {
   }, []);
 }
 
+type ModelViewerElement = HTMLElement & {
+  activateAR?: () => Promise<void>;
+  canActivateAR?: boolean;
+};
+
 function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string }) {
   useModelViewerScript();
   const [background, setBackground] = React.useState<ModelBackground>("studio");
+  const [arError, setArError] = React.useState("");
+  const viewerRef = React.useRef<ModelViewerElement | null>(null);
+
+  async function activateAR() {
+    setArError("");
+    await window.customElements.whenDefined("model-viewer");
+    const viewer = viewerRef.current;
+    if (!viewer || typeof viewer.activateAR !== "function" || viewer.canActivateAR === false) {
+      setArError(locale === "tr"
+        ? "AR bu cihazda başlatılamadı. Android'de Chrome veya iPhone'da Safari kullanın."
+        : "AR could not start on this device. Use Chrome on Android or Safari on iPhone.");
+      return;
+    }
+    try {
+      await viewer.activateAR();
+    } catch {
+      setArError(locale === "tr"
+        ? "AR açılamadı. Kamera iznini ve tarayıcı desteğini kontrol edin."
+        : "AR could not open. Check camera permission and browser support.");
+    }
+  }
+
   const viewer = React.createElement(
     "model-viewer",
     {
+      ref: viewerRef,
       src,
       alt,
       ar,
-      "ar-modes": ar ? "webxr scene-viewer quick-look" : undefined,
+      "ar-modes": ar ? "scene-viewer webxr quick-look" : undefined,
       "ar-scale": ar ? "auto" : undefined,
+      "ar-placement": ar ? "floor" : undefined,
+      "xr-environment": ar ? true : undefined,
       "camera-controls": true,
       "auto-rotate": true,
       "rotation-per-second": "14deg",
@@ -335,7 +365,6 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
       style: { touchAction: "pan-y" },
       className,
     },
-    ar && arLabel ? React.createElement("button", { slot: "ar-button", className: "ar-button" }, React.createElement(Scan), arLabel) : undefined,
   );
 
   return <div className={`model-stage ${className}-stage model-stage--${background}`}>
@@ -343,6 +372,8 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
     <div className="model-background-switcher" role="group" aria-label={locale === "tr" ? "Model arka planı" : "Model background"}>
       {modelBackgrounds.map((option) => <button key={option.id} type="button" className={`background-swatch background-swatch--${option.id}`} aria-label={option.label[locale]} title={option.label[locale]} aria-pressed={background === option.id} onClick={() => setBackground(option.id)}><span /></button>)}
     </div>
+    {ar && arLabel ? <button type="button" className="ar-button" onClick={activateAR}><Scan />{arLabel}</button> : null}
+    {arError ? <span className="ar-error" role="status">{arError}</span> : null}
     <span className="model-interaction-hint">{locale === "tr" ? "Döndür · Yakınlaştır" : "Rotate · Zoom"}</span>
   </div>;
 }
