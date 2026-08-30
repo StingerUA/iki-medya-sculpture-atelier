@@ -11,18 +11,11 @@ download() {
   curl --fail --location --retry 3 --retry-delay 2 --silent --show-error "$1" --output "$2"
 }
 
-convert_to_glb() {
+pack_to_glb() {
   local input="$1"
   local output="$2"
-  local ratio="${3:-}"
-  local raw_glb="$MODEL_TMP_DIR/raw-$(basename "$output")"
 
-  assimp export "$input" "$raw_glb" -fglb2
-  if [[ -n "$ratio" ]]; then
-    npx --yes @gltf-transform/cli simplify "$raw_glb" "$output" --ratio "$ratio" --error 0.002
-  else
-    mv "$raw_glb" "$output"
-  fi
+  assimp export "$input" "$output" -fglb2
   test -s "$output"
 }
 
@@ -41,10 +34,14 @@ download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/The_Age_Of_Bronze_(Auguste_Rodin).stl" \
   "$MODEL_TMP_DIR/age-of-bronze.stl"
 
-convert_to_glb "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb"
-convert_to_glb "$MODEL_TMP_DIR/apollo-belvedere.stl" "$MODEL_DIR/apollo-belvedere.glb" "0.40"
-convert_to_glb "$MODEL_TMP_DIR/the-thinker.stl" "$MODEL_DIR/the-thinker.glb" "0.15"
-convert_to_glb "$MODEL_TMP_DIR/age-of-bronze.stl" "$MODEL_DIR/age-of-bronze.glb" "0.07"
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb" 32000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/apollo-belvedere.stl" "$MODEL_DIR/apollo-belvedere.glb" 100000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/the-thinker.stl" "$MODEL_DIR/the-thinker.glb" 120000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/age-of-bronze.stl" "$MODEL_DIR/age-of-bronze.glb" 140000
 
 # Web-optimised CC0 decorative assets from Poly Haven. These GLBs are pinned to
 # the commit that converted the original 1K glTF releases into self-contained files.
@@ -62,6 +59,7 @@ download "$MARBLE_BASE/gltf/8k/marble_bust_01/marble_bust_01.bin" "$MARBLE_TMP/m
 download "$MARBLE_BASE/jpg/1k/marble_bust_01/marble_bust_01_diff_1k.jpg" "$MARBLE_TMP/textures/marble_bust_01_diff_1k.jpg"
 download "$MARBLE_BASE/jpg/1k/marble_bust_01/marble_bust_01_nor_gl_1k.jpg" "$MARBLE_TMP/textures/marble_bust_01_nor_gl_1k.jpg"
 download "$MARBLE_BASE/jpg/1k/marble_bust_01/marble_bust_01_rough_1k.jpg" "$MARBLE_TMP/textures/marble_bust_01_rough_1k.jpg"
-convert_to_glb "$MARBLE_TMP/marble_bust_01_1k.gltf" "$MODEL_DIR/marble-bust.glb"
+pack_to_glb "$MARBLE_TMP/marble_bust_01_1k.gltf" "$MODEL_DIR/marble-bust.glb"
 
 echo "Prepared $(find "$MODEL_DIR" -maxdepth 1 -name '*.glb' | wc -l) AR-ready GLB models."
+du -h "$MODEL_DIR"/*.glb

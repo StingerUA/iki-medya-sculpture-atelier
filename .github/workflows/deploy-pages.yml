@@ -26,6 +26,11 @@ jobs:
         with:
           node-version: 22
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install dependencies
         run: npm install
 
@@ -33,6 +38,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes assimp-utils
+          python -m pip install --disable-pip-version-check trimesh fast-simplification
 
       - name: Prepare licensed AR models
         run: bash scripts/prepare-pages-models.sh
