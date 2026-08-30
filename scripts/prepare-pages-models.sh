@@ -12,8 +12,18 @@ download() {
 }
 
 convert_to_glb() {
-  assimp export "$1" "$2" -fglb2
-  test -s "$2"
+  local input="$1"
+  local output="$2"
+  local ratio="${3:-}"
+  local raw_glb="$MODEL_TMP_DIR/raw-$(basename "$output")"
+
+  assimp export "$input" "$raw_glb" -fglb2
+  if [[ -n "$ratio" ]]; then
+    npx --yes @gltf-transform/cli simplify "$raw_glb" "$output" --ratio "$ratio" --error 0.002
+  else
+    mv "$raw_glb" "$output"
+  fi
+  test -s "$output"
 }
 
 # Ancient classics and modern museum works. The source pages and licences are
@@ -32,9 +42,9 @@ download \
   "$MODEL_TMP_DIR/age-of-bronze.stl"
 
 convert_to_glb "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb"
-convert_to_glb "$MODEL_TMP_DIR/apollo-belvedere.stl" "$MODEL_DIR/apollo-belvedere.glb"
-convert_to_glb "$MODEL_TMP_DIR/the-thinker.stl" "$MODEL_DIR/the-thinker.glb"
-convert_to_glb "$MODEL_TMP_DIR/age-of-bronze.stl" "$MODEL_DIR/age-of-bronze.glb"
+convert_to_glb "$MODEL_TMP_DIR/apollo-belvedere.stl" "$MODEL_DIR/apollo-belvedere.glb" "0.40"
+convert_to_glb "$MODEL_TMP_DIR/the-thinker.stl" "$MODEL_DIR/the-thinker.glb" "0.15"
+convert_to_glb "$MODEL_TMP_DIR/age-of-bronze.stl" "$MODEL_DIR/age-of-bronze.glb" "0.07"
 
 # Web-optimised CC0 decorative assets from Poly Haven. These GLBs are pinned to
 # the commit that converted the original 1K glTF releases into self-contained files.
