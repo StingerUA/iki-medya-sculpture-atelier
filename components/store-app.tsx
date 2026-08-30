@@ -98,8 +98,8 @@ const copy = {
 } as const;
 
 const styleLabels: Record<Locale, Record<Product["style"], string>> = {
-  tr: { ancient: "Antik klasik", modern: "Modern sanat", decorative: "Dekoratif heykel", vase: "Vazo" },
-  en: { ancient: "Ancient classics", modern: "Modern art", decorative: "Decorative sculpture", vase: "Vase" },
+  tr: { ancient: "Antik klasik", renaissance: "Rönesans", neoclassical: "Neoklasik", modern: "Modern sanat", decorative: "Dekoratif heykel", vase: "Vazo" },
+  en: { ancient: "Ancient classics", renaissance: "Renaissance", neoclassical: "Neoclassical", modern: "Modern art", decorative: "Decorative sculpture", vase: "Vase" },
 };
 
 const modelBackgrounds = [
@@ -319,7 +319,10 @@ type ModelViewerElement = HTMLElement & {
 
 function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string }) {
   useModelViewerScript();
-  const [background, setBackground] = React.useState<ModelBackground>("studio");
+  const presentation = products.find((product) => product.model === src);
+  const preferredBackground = presentation?.initialBackground ?? "studio";
+  const [backgroundSelection, setBackgroundSelection] = React.useState<{ src: string; value: ModelBackground }>({ src, value: preferredBackground });
+  const background = backgroundSelection.src === src ? backgroundSelection.value : preferredBackground;
   const [arError, setArError] = React.useState("");
   const [viewerReady, setViewerReady] = React.useState(false);
   const viewerRef = React.useRef<ModelViewerElement | null>(null);
@@ -360,6 +363,7 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
       ref: viewerRef,
       src,
       alt,
+      orientation: presentation?.orientation,
       ar,
       "ar-modes": ar ? "scene-viewer webxr quick-look" : undefined,
       "ar-scale": ar ? "auto" : undefined,
@@ -382,7 +386,7 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
   return <div className={`model-stage ${className}-stage model-stage--${background}`}>
     {viewer}
     <div className="model-background-switcher" role="group" aria-label={locale === "tr" ? "Model arka planı" : "Model background"}>
-      {modelBackgrounds.map((option) => <button key={option.id} type="button" className={`background-swatch background-swatch--${option.id}`} aria-label={option.label[locale]} title={option.label[locale]} aria-pressed={background === option.id} onClick={() => setBackground(option.id)}><span /></button>)}
+      {modelBackgrounds.map((option) => <button key={option.id} type="button" className={`background-swatch background-swatch--${option.id}`} aria-label={option.label[locale]} title={option.label[locale]} aria-pressed={background === option.id} onClick={() => setBackgroundSelection({ src, value: option.id })}><span /></button>)}
     </div>
     {ar && arLabel ? <button type="button" className="ar-button" onClick={activateAR} disabled={!viewerReady}><Scan />{arLabel}</button> : null}
     {arError ? <span className="ar-error" role="status">{arError}</span> : null}
