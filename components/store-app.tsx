@@ -25,6 +25,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -317,6 +318,12 @@ type ModelViewerElement = HTMLElement & {
   canActivateAR?: boolean;
 };
 
+type ModelLoadState = {
+  src: string;
+  progress: number;
+  status: "loading" | "loaded" | "error";
+};
+
 function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string }) {
   useModelViewerScript();
   const presentation = products.find((product) => product.model === src);
@@ -325,7 +332,10 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
   const background = backgroundSelection.src === src ? backgroundSelection.value : preferredBackground;
   const [arError, setArError] = React.useState("");
   const [viewerReady, setViewerReady] = React.useState(false);
+  const [loadState, setLoadState] = React.useState<ModelLoadState>({ src, progress: 0, status: "loading" });
   const viewerRef = React.useRef<ModelViewerElement | null>(null);
+  const currentLoadState = loadState.src === src ? loadState : { src, progress: 0, status: "loading" as const };
+  const loadPercentage = Math.min(100, Math.max(0, Math.round(currentLoadState.progress * 100)));
 
   React.useEffect(() => {
     let mounted = true;
@@ -334,6 +344,27 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
     });
     return () => { mounted = false; };
   }, []);
+
+  React.useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+
+    const handleProgress = (event: Event) => {
+      const totalProgress = (event as CustomEvent<{ totalProgress?: number }>).detail?.totalProgress ?? 0;
+      setLoadState({ src, progress: totalProgress, status: "loading" });
+    };
+    const handleLoad = () => setLoadState({ src, progress: 1, status: "loaded" });
+    const handleError = () => setLoadState({ src, progress: 0, status: "error" });
+
+    viewer.addEventListener("progress", handleProgress);
+    viewer.addEventListener("load", handleLoad);
+    viewer.addEventListener("error", handleError);
+    return () => {
+      viewer.removeEventListener("progress", handleProgress);
+      viewer.removeEventListener("load", handleLoad);
+      viewer.removeEventListener("error", handleError);
+    };
+  }, [src]);
 
   function activateAR() {
     setArError("");
@@ -370,9 +401,7 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
       "ar-placement": ar ? "floor" : undefined,
       "xr-environment": ar ? true : undefined,
       "camera-controls": true,
-      "auto-rotate": true,
-      "rotation-per-second": "14deg",
-      "interaction-prompt": "auto",
+      "interaction-prompt": "none",
       "shadow-intensity": "1.15",
       "shadow-softness": "0.8",
       "environment-image": "neutral",
@@ -385,6 +414,10 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
 
   return <div className={`model-stage ${className}-stage model-stage--${background}`}>
     {viewer}
+    {currentLoadState.status !== "loaded" ? <div className={`model-loading${currentLoadState.status === "error" ? " model-loading--error" : ""}`} role="status" aria-live="polite">
+      <div className="model-loading-label"><span>{currentLoadState.status === "error" ? (locale === "tr" ? "Model yüklenemedi" : "Model failed to load") : (locale === "tr" ? "3D model yükleniyor" : "Loading 3D model")}</span><strong>{currentLoadState.status === "error" ? "!" : `${loadPercentage}%`}</strong></div>
+      <Progress value={currentLoadState.status === "error" ? 0 : loadPercentage} className="model-loading-progress" aria-label={locale === "tr" ? `Model yükleme yüzde ${loadPercentage}` : `Model loading ${loadPercentage} percent`} />
+    </div> : null}
     <div className="model-background-switcher" role="group" aria-label={locale === "tr" ? "Model arka planı" : "Model background"}>
       {modelBackgrounds.map((option) => <button key={option.id} type="button" className={`background-swatch background-swatch--${option.id}`} aria-label={option.label[locale]} title={option.label[locale]} aria-pressed={background === option.id} onClick={() => setBackgroundSelection({ src, value: option.id })}><span /></button>)}
     </div>

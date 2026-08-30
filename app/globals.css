@@ -251,6 +251,14 @@ button { cursor: pointer; }
 .model-stage--night { background: #111; }
 .model-stage--night::before { background: radial-gradient(circle at 50% 38%, #4c4c4a 0, #242423 38%, #090909 78%); }
 .model-stage model-viewer { position: relative; z-index: 1; background: transparent !important; }
+.model-loading { position: absolute; top: 14px; left: 50%; z-index: 7; width: min(220px, calc(100% - 96px)); padding: 8px 10px 9px; border: 1px solid #0a0a0a; background: rgba(244,244,240,.94); color: #0a0a0a; box-shadow: 3px 3px 0 rgba(10,10,10,.2); transform: translateX(-50%); backdrop-filter: blur(8px); pointer-events: none; }
+.model-loading-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; font-size: .58rem; font-weight: 800; letter-spacing: .08em; line-height: 1.2; text-transform: uppercase; }
+.model-loading-label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.model-loading-label strong { font-size: .62rem; font-variant-numeric: tabular-nums; }
+.model-loading-progress { height: 4px !important; border-radius: 0 !important; background: #c8c8c2 !important; }
+.model-loading-progress [data-slot="progress-indicator"] { background: #0a0a0a !important; transition: transform .18s linear !important; }
+.model-loading--error { background: #0a0a0a; color: #fff; }
+.model-loading--error .model-loading-progress { background: #484844 !important; }
 .hero-model-stage { min-height: 620px; }
 .product-image > .model-stage, .detail-image > .model-stage { position: absolute; inset: 0; }
 .about-model-stage, .model-viewer-stage { min-height: inherit; }
@@ -268,6 +276,9 @@ button { cursor: pointer; }
 .cart-model-stage .background-swatch { width: 18px; height: 18px; }
 .cart-model-stage .background-swatch span { width: 10px; height: 10px; }
 .cart-model-stage .model-interaction-hint { display: none; }
+.cart-model-stage .model-loading { top: 4px; width: calc(100% - 8px); padding: 5px; box-shadow: none; }
+.cart-model-stage .model-loading-label { margin-bottom: 3px; }
+.cart-model-stage .model-loading-label span { display: none; }
 
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 36px; margin-bottom: 52px; }
 .section-heading h2, .ar-section h2 { margin: 16px 0 0; font-size: clamp(2.4rem, 5vw, 5.4rem); font-weight: 900; letter-spacing: -.055em; line-height: .9; }
