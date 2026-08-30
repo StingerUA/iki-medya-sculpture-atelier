@@ -27,13 +27,13 @@ def main() -> None:
         raise RuntimeError(f"No mesh geometry found in {input_path}")
 
     mesh.remove_unreferenced_vertices()
-    mesh.fix_normals()
+    mesh.fix_normals(multibody=False)
     original_faces = len(mesh.faces)
 
     if target_faces and original_faces > target_faces:
         mesh = mesh.simplify_quadric_decimation(face_count=target_faces)
         mesh.remove_unreferenced_vertices()
-        mesh.fix_normals()
+        mesh.fix_normals(multibody=False)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     mesh.export(output_path, file_type="glb")
