@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Globe2,
   LogOut,
+  Menu,
   Minus,
   Plus,
   Scan,
@@ -243,7 +244,12 @@ function SiteHeader({ locale, currentPath, navigate, cartCount, onCart, onAuth, 
   locale: Locale; currentPath: string; navigate: (path: string) => void; cartCount: number; onCart: () => void; onAuth: () => void; onLocale: () => void; user: PublicUser | null;
 }) {
   const t = copy[locale];
+  const [menuOpen, setMenuOpen] = React.useState(false);
   const links = [[t.catalog, pathFor(locale, "catalog")], [t.about, pathFor(locale, "about")], [t.contact, pathFor(locale, "contact")]];
+  function mobileNavigate(path: string) {
+    setMenuOpen(false);
+    navigate(path);
+  }
   return <header className="site-header">
     <LinkButton href={pathFor(locale, "home")} navigate={navigate} className="brand-mark"><span>İKİ</span><span>3D</span></LinkButton>
     <nav className="desktop-nav" aria-label="Primary navigation">{links.map(([label, href]) => <LinkButton key={href} href={href} navigate={navigate} className={currentPath.startsWith(href) ? "active" : ""}>{label}</LinkButton>)}</nav>
@@ -251,6 +257,17 @@ function SiteHeader({ locale, currentPath, navigate, cartCount, onCart, onAuth, 
       <button className="text-action" onClick={onLocale} aria-label={locale === "tr" ? "Switch to English" : "Türkçeye geç"}><Globe2 /> {locale === "tr" ? "EN" : "TR"}</button>
       <button className="icon-action" onClick={onAuth} aria-label={t.account} title={user?.email ?? t.account}><UserRound /></button>
       <button className="cart-action" onClick={onCart} aria-label={`${t.cart}: ${cartCount}`}><ShoppingBag /><span>{cartCount.toString().padStart(2, "0")}</span></button>
+      <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+        <button className="mobile-menu-trigger" onClick={() => setMenuOpen(true)} aria-label={locale === "tr" ? "Menüyü aç" : "Open menu"} aria-expanded={menuOpen}><Menu /></button>
+        <SheetContent side="left" className="mobile-menu-sheet">
+          <SheetHeader><SheetTitle>İKİ / 3D</SheetTitle><SheetDescription>{locale === "tr" ? "Menü" : "Menu"}</SheetDescription></SheetHeader>
+          <nav className="mobile-nav" aria-label={locale === "tr" ? "Mobil navigasyon" : "Mobile navigation"}>
+            <a href={pathFor(locale, "home")} className={currentPath === `/${locale}` ? "active" : ""} onClick={(event) => { event.preventDefault(); mobileNavigate(pathFor(locale, "home")); }}>{t.home}<span>00</span></a>
+            {links.map(([label, href], index) => <a key={href} href={href} className={currentPath.startsWith(href) ? "active" : ""} onClick={(event) => { event.preventDefault(); mobileNavigate(href); }}>{label}<span>0{index + 1}</span></a>)}
+          </nav>
+          <div className="mobile-menu-footer"><span>İKİ MEDYA</span><span>ADANA / TÜRKİYE</span></div>
+        </SheetContent>
+      </Sheet>
     </div>
   </header>;
 }
