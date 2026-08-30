@@ -1,3 +1,0 @@
-import { describe, expect, it } from "vitest";
-import { quoteEnquirySchema } from "./routers/enquiries";
-describe("teklif talebi girdisi", () => { const valid = { name: "Ada Lovelace", email: "ada@example.com", projectType: "Size özel heykel", message: "Yeni bir ofis binasının lobisi için büyük ölçekli heykelsi bir obje.", selectedWorks: ["FORM / 01 × 2"] }; it("yapılandırılmış proje talebini kabul eder", () => expect(quoteEnquirySchema.parse(valid)).toMatchObject(valid)); it("hatalı e-postayı ve kısa proje özetini reddeder", () => expect(() => quoteEnquirySchema.parse({ ...valid, email: "gecersiz", message: "kısa" })).toThrow()); });

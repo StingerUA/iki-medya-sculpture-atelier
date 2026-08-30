@@ -1,6 +1,0 @@
-import { describe, expect, it } from "vitest";
-import { filterAndSortSculptures } from "../shared/catalogFilters";
-import type { Sculpture } from "../shared/catalog";
-const base: Sculpture = { id: "a", slug: "a", index: "01", title: "A", category: "Obje", description: "", dimensions: "", material: "", finish: "", production: "", size: "Büyük", style: "Mimari", priceCents: null, arReady: false, visual: "arch" };
-const priced: Sculpture[] = [{ ...base, id: "one", slug: "one", title: "Bir", index: "01", priceCents: 350000 }, { ...base, id: "two", slug: "two", title: "İki", index: "02", size: "Çok büyük", style: "Organik", priceCents: 120000 }, { ...base, id: "three", slug: "three", title: "Üç", index: "03", style: "Geometrik", priceCents: null }];
-describe("katalog filtreleri", () => { it("boyut ve stile göre birlikte filtreler", () => expect(filterAndSortSculptures(priced, { size: "Çok büyük", style: "Organik", sort: "recommended" }).map(item => item.id)).toEqual(["two"])); it("fiyatlandırılmış işleri sıralar ve fiyatı teklif üzerindekileri sona bırakır", () => expect(filterAndSortSculptures(priced, { size: "all", style: "all", sort: "price-asc" }).map(item => item.id)).toEqual(["two", "one", "three"])); });

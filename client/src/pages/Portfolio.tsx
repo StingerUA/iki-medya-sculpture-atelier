@@ -1,4 +1,0 @@
-import { ArrowUpRight } from "lucide-react";
-import { Link } from "wouter";
-import SculptureArt from "@/components/SculptureArt";
-export default function Portfolio() { return <main className="page"><section className="page-intro"><p className="eyebrow">Portföy</p><h1>Yerleştirmelerin <em>gelişen</em> kaydı.</h1><p>Sculpture Atelier, tamamlanan her yerleştirmeyi mimari, malzeme ve kullanım ile kurduğu ilişki üzerinden belgeler. Bu arşiv, onaylı proje fotoğrafları, künyeler ve bağlam bilgileri için ayrılmıştır.</p></section><section className="about-statement"><SculptureArt visual="loop" className="about-statement__art" inverse /><div><p className="eyebrow">Proje arşivi</p><h2>Her obje bir mekânla başlar.</h2><p>Siparişler tamamlandıkça hikâyeleri burada paylaşılır: brief, ölçek, malzeme seçimleri ve son çalışmayı şekillendiren ortam.</p><Link href="/contact" className="button button--light">Bir proje başlat <ArrowUpRight size={17} /></Link></div></section></main>; }

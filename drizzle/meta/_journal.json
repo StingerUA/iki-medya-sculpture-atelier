@@ -1,19 +1,12 @@
 {
   "version": "7",
-  "dialect": "mysql",
+  "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1787784748264,
-      "tag": "0000_left_network",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1787796703131,
-      "tag": "0001_absent_zaladane",
+      "version": "6",
+      "when": 1787886325747,
+      "tag": "0000_flaky_zemo",
       "breakpoints": true
     }
   ]

@@ -21,35 +21,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm install
 
-      - name: Check and test
-        run: |
-          pnpm check
-          pnpm test
-
-      - name: Build static storefront
-        run: pnpm exec vite build --base=/iki-medya-sculpture-atelier/
+      - name: Build GitHub Pages site
+        run: npm run build:pages
 
       - name: Add SPA fallback
         run: |
-          cp dist/public/index.html dist/public/404.html
-          touch dist/public/.nojekyll
+          cp dist-pages/pages/index.html dist-pages/404.html
+          cp dist-pages/pages/index.html dist-pages/index.html
+          touch dist-pages/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/public
+          path: dist-pages
 
   deploy:
     environment:
