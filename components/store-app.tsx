@@ -321,11 +321,19 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
   useModelViewerScript();
   const [background, setBackground] = React.useState<ModelBackground>("studio");
   const [arError, setArError] = React.useState("");
+  const [viewerReady, setViewerReady] = React.useState(false);
   const viewerRef = React.useRef<ModelViewerElement | null>(null);
 
-  async function activateAR() {
+  React.useEffect(() => {
+    let mounted = true;
+    window.customElements.whenDefined("model-viewer").then(() => {
+      if (mounted) setViewerReady(true);
+    });
+    return () => { mounted = false; };
+  }, []);
+
+  function activateAR() {
     setArError("");
-    await window.customElements.whenDefined("model-viewer");
     const viewer = viewerRef.current;
     if (!viewer || typeof viewer.activateAR !== "function" || viewer.canActivateAR === false) {
       setArError(locale === "tr"
@@ -334,7 +342,11 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
       return;
     }
     try {
-      await viewer.activateAR();
+      void viewer.activateAR().catch(() => {
+        setArError(locale === "tr"
+          ? "AR açılamadı. Kamera iznini ve tarayıcı desteğini kontrol edin."
+          : "AR could not open. Check camera permission and browser support.");
+      });
     } catch {
       setArError(locale === "tr"
         ? "AR açılamadı. Kamera iznini ve tarayıcı desteğini kontrol edin."
@@ -372,7 +384,7 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
     <div className="model-background-switcher" role="group" aria-label={locale === "tr" ? "Model arka planı" : "Model background"}>
       {modelBackgrounds.map((option) => <button key={option.id} type="button" className={`background-swatch background-swatch--${option.id}`} aria-label={option.label[locale]} title={option.label[locale]} aria-pressed={background === option.id} onClick={() => setBackground(option.id)}><span /></button>)}
     </div>
-    {ar && arLabel ? <button type="button" className="ar-button" onClick={activateAR}><Scan />{arLabel}</button> : null}
+    {ar && arLabel ? <button type="button" className="ar-button" onClick={activateAR} disabled={!viewerReady}><Scan />{arLabel}</button> : null}
     {arError ? <span className="ar-error" role="status">{arError}</span> : null}
     <span className="model-interaction-hint">{locale === "tr" ? "Döndür · Yakınlaştır" : "Rotate · Zoom"}</span>
   </div>;
