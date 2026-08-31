@@ -39,14 +39,14 @@ def main() -> None:
 
     mesh.remove_unreferenced_vertices()
     mesh.fix_normals(multibody=False)
-    apply_smooth_normals(mesh)
     original_faces = len(mesh.faces)
 
     if target_faces and original_faces > target_faces:
         mesh = mesh.simplify_quadric_decimation(face_count=target_faces)
         mesh.remove_unreferenced_vertices()
         mesh.fix_normals(multibody=False)
-        apply_smooth_normals(mesh)
+
+    apply_smooth_normals(mesh)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     mesh.export(output_path, file_type="glb")
