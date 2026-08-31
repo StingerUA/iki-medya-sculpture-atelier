@@ -42,6 +42,18 @@ download \
 download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/25-msr-cleopatre-v-5.stl" \
   "$MODEL_TMP_DIR/cleopatra-v-portrait.stl"
+download \
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Column_Krater.stl" \
+  "$MODEL_TMP_DIR/greek-column-krater.stl"
+download \
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Neck_Amphora.stl" \
+  "$MODEL_TMP_DIR/greek-neck-amphora.stl"
+download \
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Hydria.stl" \
+  "$MODEL_TMP_DIR/greek-hydria.stl"
+download \
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Loutrophoros.stl" \
+  "$MODEL_TMP_DIR/greek-loutrophoros.stl"
 
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb" 32000
@@ -57,12 +69,19 @@ python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/socrates-bust.stl" "$MODEL_DIR/socrates-bust.glb" 220000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/cleopatra-v-portrait.stl" "$MODEL_DIR/cleopatra-v-portrait.glb" 220000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/greek-column-krater.stl" "$MODEL_DIR/greek-column-krater.glb" 100000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/greek-neck-amphora.stl" "$MODEL_DIR/greek-neck-amphora.glb" 100000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/greek-hydria.stl" "$MODEL_DIR/greek-hydria.glb" 100000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/greek-loutrophoros.stl" "$MODEL_DIR/greek-loutrophoros.glb" 100000
 
 # Web-optimised CC0 decorative assets from Poly Haven. These GLBs are pinned to
 # the commit that converted the original 1K glTF releases into self-contained files.
 POLY_GLBS="https://raw.githubusercontent.com/lsgmasa33/modoki-postfx-demo/88e73f2d0cc05bd1564d7615c3d23aea6f1dc68d/runtime/assets/models"
 download "$POLY_GLBS/gothic_statue.glb" "$MODEL_DIR/gothic-guardian.glb"
-download "$POLY_GLBS/antique_ceramic_vase_01.glb" "$MODEL_DIR/antique-ceramic-vase.glb"
 
 # Poly Haven Marble Bust 01: fetch the official 1K glTF bundle and pack it as a
 # single GLB so Android Scene Viewer can open it reliably.

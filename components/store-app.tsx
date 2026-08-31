@@ -65,7 +65,7 @@ const copy = {
     process: "FİKİRDEN MEKÂNA", steps: ["Modelleme", "Büyük format baskı", "Yüzey ve teslimat"],
     processText: ["Hazır modelinizi üretime hazırlıyor veya fikrinizi sıfırdan üç boyutlu tasarlıyoruz.", "Parçalama, iç yapı ve malzeme seçimini eserin ölçeğine göre planlıyoruz.", "Zımpara, boya ve koruyucu katman sonrası teslimat planını birlikte netleştiriyoruz."],
     filters: "FİLTRELER", height: "Yükseklik", allStyles: "Tüm stiller", sort: "Sıralama",
-    priceLow: "Fiyat: düşükten yükseğe", priceHigh: "Fiyat: yüksekten düşüğe", sizeHigh: "Boyut: büyükten küçüğe", results: "eser",
+    randomOrder: "Her açılışta rastgele", priceLow: "Fiyat: düşükten yükseğe", priceHigh: "Fiyat: yüksekten düşüğe", sizeHigh: "Boyut: büyükten küçüğe", results: "eser",
     add: "Sepete ekle", details: "Detaylar", noResults: "Bu filtrelere uygun eser bulunamadı.", reset: "Filtreleri sıfırla",
     specs: "TEKNİK ÖZELLİKLER", dimensions: "Yükseklik", material: "Malzeme", finish: "Renk / bitiş", leadTime: "Tahmini üretim",
     arTitle: "MEKÂNINIZDA GÖRÜN", arText: "Telefonunuzda AR düğmesine dokunarak heykeli mekânınıza yerleştirin ve boyutunu ayarlayın.", arUnavailable: "Bu eser için AR modeli yakında eklenecek.",
@@ -85,7 +85,7 @@ const copy = {
     process: "FROM IDEA TO SPACE", steps: ["3D modelling", "Large-format printing", "Finish and delivery"],
     processText: ["We prepare your model for production or design your idea in 3D from the ground up.", "Part splitting, internal structure and material are planned around the final scale.", "After sanding, paint and protective coating, we confirm the delivery plan together."],
     filters: "FILTERS", height: "Height", allStyles: "All styles", sort: "Sort",
-    priceLow: "Price: low to high", priceHigh: "Price: high to low", sizeHigh: "Size: large to small", results: "works",
+    randomOrder: "Random on each visit", priceLow: "Price: low to high", priceHigh: "Price: high to low", sizeHigh: "Size: large to small", results: "works",
     add: "Add to cart", details: "Details", noResults: "No works match these filters.", reset: "Reset filters",
     specs: "SPECIFICATIONS", dimensions: "Height", material: "Material", finish: "Colour / finish", leadTime: "Estimated production",
     arTitle: "VIEW IT IN YOUR SPACE", arText: "Tap the AR button on your phone to place the sculpture in your space and adjust its scale.", arUnavailable: "An AR model for this piece is coming soon.",
@@ -273,30 +273,42 @@ function SiteHeader({ locale, currentPath, navigate, cartCount, onCart, onAuth, 
   </header>;
 }
 
+function shuffleProducts(items: Product[]) {
+  const shuffled = [...items];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
 function HomeView({ locale, navigate, onAdd }: { locale: Locale; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
+  const homeProducts = React.useMemo(() => shuffleProducts(products), []);
   return <>
-    <section className="hero-section"><div className="hero-copy"><p className="eyebrow">{t.heroKicker}</p><h1>{t.heroTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><p className="hero-text">{t.heroText}</p><div className="hero-buttons"><Button className="square-button" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ArrowRight /></Button><Button variant="outline" className="square-button" onClick={() => navigate(pathFor(locale, "contact"))}>{t.custom}</Button></div></div><div className="hero-art"><ModelPreview src={products[2].model} alt={products[2].name} className="hero-model" locale={locale} /><div className="hero-art-label"><Scan />{t.arReady}</div></div></section>
-    <section className="collection-preview section-pad"><div className="section-heading"><div><p className="eyebrow">01 / {t.collection}</p><h2>{t.collection}</h2></div><p>{t.collectionText}</p></div><div className="featured-grid">{products.slice(0, 3).map((product, index) => <ProductCard key={product.slug} product={product} locale={locale} index={index + 1} navigate={navigate} onAdd={onAdd} />)}</div><button className="wide-link" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ChevronRight /></button></section>
+    <section className="hero-section"><div className="hero-copy"><p className="eyebrow">{t.heroKicker}</p><h1>{t.heroTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><p className="hero-text">{t.heroText}</p><div className="hero-buttons"><Button className="square-button" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ArrowRight /></Button><Button variant="outline" className="square-button" onClick={() => navigate(pathFor(locale, "contact"))}>{t.custom}</Button></div></div><div className="hero-art"><ModelPreview src={homeProducts[0].model} alt={homeProducts[0].name} className="hero-model" locale={locale} /><div className="hero-art-label"><Scan />{t.arReady}</div></div></section>
+    <section className="collection-preview section-pad"><div className="section-heading"><div><p className="eyebrow">01 / {t.collection}</p><h2>{t.collection}</h2></div><p>{t.collectionText}</p></div><div className="featured-grid">{homeProducts.slice(0, 3).map((product, index) => <ProductCard key={product.slug} product={product} locale={locale} index={index + 1} navigate={navigate} onAdd={onAdd} />)}</div><button className="wide-link" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ChevronRight /></button></section>
     <section className="process-section section-pad"><p className="eyebrow">02 / {t.process}</p><div className="process-grid">{t.steps.map((step, index) => <article key={step}><span>0{index + 1}</span><h3>{step}</h3><p>{t.processText[index]}</p></article>)}</div></section>
   </>;
 }
 
 function CatalogView({ locale, navigate, onAdd }: { locale: Locale; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
-  const [height, setHeight] = React.useState([40, 200]);
+  const randomProducts = React.useMemo(() => shuffleProducts(products), []);
+  const [height, setHeight] = React.useState([40, 240]);
   const [style, setStyle] = React.useState("all");
-  const [sort, setSort] = React.useState("price-asc");
+  const [sort, setSort] = React.useState("random");
   const filtered = React.useMemo(() => {
-    const result = products.filter((product) => product.height >= height[0] && product.height <= height[1] && (style === "all" || product.style === style));
+    const result = randomProducts.filter((product) => product.height >= height[0] && product.height <= height[1] && (style === "all" || product.style === style));
+    if (sort === "random") return result;
     return [...result].sort((a, b) => sort === "price-desc" ? b.price - a.price : sort === "size-desc" ? b.height - a.height : a.price - b.price);
-  }, [height, style, sort]);
-  return <section className="catalog-page section-pad"><div className="catalog-title"><p className="eyebrow">01 / {t.catalog}</p><h1>{t.catalog}</h1><span>{filtered.length.toString().padStart(2, "0")} {t.results}</span></div><div className="catalog-layout"><aside className="filter-panel"><p className="eyebrow">{t.filters}</p><div className="filter-block"><label>{t.height}</label><strong>{height[0]}–{height[1]} cm</strong><Slider min={40} max={200} step={5} value={height} onValueChange={setHeight} aria-label={t.height} /></div><div className="filter-block"><label>{locale === "tr" ? "Stil" : "Style"}</label><Select value={style} onValueChange={setStyle}><SelectTrigger className="filter-select"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">{t.allStyles}</SelectItem>{styles.map((value) => <SelectItem key={value} value={value}>{styleLabels[locale][value]}</SelectItem>)}</SelectContent></Select></div><div className="filter-block"><label>{t.sort}</label><Select value={sort} onValueChange={setSort}><SelectTrigger className="filter-select"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="price-asc">{t.priceLow}</SelectItem><SelectItem value="price-desc">{t.priceHigh}</SelectItem><SelectItem value="size-desc">{t.sizeHigh}</SelectItem></SelectContent></Select></div><Button variant="outline" className="square-button" onClick={() => { setHeight([40, 200]); setStyle("all"); setSort("price-asc"); }}>{t.reset}</Button></aside><div className="catalog-grid">{filtered.length ? filtered.map((product, index) => <ProductCard key={product.slug} product={product} locale={locale} index={index + 1} navigate={navigate} onAdd={onAdd} />) : <div className="empty-state"><Box /><p>{t.noResults}</p></div>}</div></div></section>;
+  }, [height, randomProducts, style, sort]);
+  return <section className="catalog-page section-pad"><div className="catalog-title"><p className="eyebrow">01 / {t.catalog}</p><h1>{t.catalog}</h1><span>{filtered.length.toString().padStart(2, "0")} {t.results}</span></div><div className="catalog-layout"><aside className="filter-panel"><p className="eyebrow">{t.filters}</p><div className="filter-block"><label>{t.height}</label><strong>{height[0]}–{height[1]} cm</strong><Slider min={40} max={240} step={5} value={height} onValueChange={setHeight} aria-label={t.height} /></div><div className="filter-block"><label>{locale === "tr" ? "Stil" : "Style"}</label><Select value={style} onValueChange={setStyle}><SelectTrigger className="filter-select"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">{t.allStyles}</SelectItem>{styles.map((value) => <SelectItem key={value} value={value}>{styleLabels[locale][value]}</SelectItem>)}</SelectContent></Select></div><div className="filter-block"><label>{t.sort}</label><Select value={sort} onValueChange={setSort}><SelectTrigger className="filter-select"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="random">{t.randomOrder}</SelectItem><SelectItem value="price-asc">{t.priceLow}</SelectItem><SelectItem value="price-desc">{t.priceHigh}</SelectItem><SelectItem value="size-desc">{t.sizeHigh}</SelectItem></SelectContent></Select></div><Button variant="outline" className="square-button" onClick={() => { setHeight([40, 240]); setStyle("all"); setSort("random"); }}>{t.reset}</Button></aside><div className="catalog-grid">{filtered.length ? filtered.map((product, index) => <ProductCard key={product.slug} product={product} locale={locale} index={index + 1} navigate={navigate} onAdd={onAdd} priority={index < 2} />) : <div className="empty-state"><Box /><p>{t.noResults}</p></div>}</div></div></section>;
 }
 
-function ProductCard({ product, locale, index, navigate, onAdd }: { product: Product; locale: Locale; index: number; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
+function ProductCard({ product, locale, index, navigate, onAdd, priority = true }: { product: Product; locale: Locale; index: number; navigate: (path: string) => void; onAdd: (slug: string) => void; priority?: boolean }) {
   const t = copy[locale];
-  return <article className="product-card"><div className="product-image"><ModelPreview src={product.model} alt={product.name} className="card-model" locale={locale} /><span className="product-index">{index.toString().padStart(2, "0")}</span><span className="ar-badge"><Scan />AR</span></div><div className="product-meta"><div><p>{styleLabels[locale][product.style]} / {product.height} cm</p><h3>{product.name}</h3></div><strong>{formatPrice(product.price, locale)}</strong></div><div className="product-actions"><Button variant="outline" className="square-button" onClick={() => navigate(productPath(locale, product.slug))}>{t.details}</Button><Button className="square-button" onClick={() => onAdd(product.slug)}>{t.add}<Plus /></Button></div></article>;
+  return <article className="product-card"><div className="product-image"><ModelPreview src={product.model} alt={product.name} className="card-model" locale={locale} poster={priority ? undefined : product.poster} loading={priority ? "eager" : "lazy"} /><span className="product-index">{index.toString().padStart(2, "0")}</span><span className="ar-badge"><Scan />AR</span></div><div className="product-meta"><div><p>{styleLabels[locale][product.style]} / {product.height} cm</p><h3>{product.name}</h3></div><strong>{formatPrice(product.price, locale)}</strong></div><div className="product-actions"><Button variant="outline" className="square-button" onClick={() => navigate(productPath(locale, product.slug))}>{t.details}</Button><Button className="square-button" onClick={() => onAdd(product.slug)}>{t.add}<Plus /></Button></div></article>;
 }
 
 function ProductView({ locale, product, navigate, onAdd }: { locale: Locale; product: Product; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
@@ -316,6 +328,7 @@ function useModelViewerScript() {
 type ModelViewerElement = HTMLElement & {
   activateAR?: () => Promise<void>;
   canActivateAR?: boolean;
+  loaded?: boolean;
 };
 
 type ModelLoadState = {
@@ -324,7 +337,7 @@ type ModelLoadState = {
   status: "loading" | "loaded" | "error";
 };
 
-function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string }) {
+function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, loading = "eager" }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string; poster?: string; loading?: "eager" | "lazy" }) {
   useModelViewerScript();
   const presentation = products.find((product) => product.model === src);
   const preferredBackground = presentation?.initialBackground ?? "studio";
@@ -351,7 +364,8 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
 
     const handleProgress = (event: Event) => {
       const totalProgress = (event as CustomEvent<{ totalProgress?: number }>).detail?.totalProgress ?? 0;
-      setLoadState({ src, progress: totalProgress, status: "loading" });
+      const boundedProgress = Math.min(1, Math.max(0, totalProgress));
+      setLoadState({ src, progress: boundedProgress, status: boundedProgress >= 0.999 ? "loaded" : "loading" });
     };
     const handleLoad = () => setLoadState({ src, progress: 1, status: "loaded" });
     const handleError = () => setLoadState({ src, progress: 0, status: "error" });
@@ -359,6 +373,7 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
     viewer.addEventListener("progress", handleProgress);
     viewer.addEventListener("load", handleLoad);
     viewer.addEventListener("error", handleError);
+    if (viewer.loaded) handleLoad();
     return () => {
       viewer.removeEventListener("progress", handleProgress);
       viewer.removeEventListener("load", handleLoad);
@@ -394,6 +409,9 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
       ref: viewerRef,
       src,
       alt,
+      poster,
+      loading,
+      reveal: poster ? "auto" : undefined,
       orientation: presentation?.orientation,
       ar,
       "ar-modes": ar ? "scene-viewer webxr quick-look" : undefined,
@@ -427,8 +445,8 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel }: { src:
   </div>;
 }
 
-function ModelPreview({ src, alt, className, locale }: { src: string; alt: string; className: string; locale: Locale }) {
-  return <ModelStage src={src} alt={alt} className={className} locale={locale} />;
+function ModelPreview({ src, alt, className, locale, poster, loading }: { src: string; alt: string; className: string; locale: Locale; poster?: string; loading?: "eager" | "lazy" }) {
+  return <ModelStage src={src} alt={alt} className={className} locale={locale} poster={poster} loading={loading} />;
 }
 
 function ModelViewer({ src, alt, arLabel, locale }: { src: string; alt: string; arLabel: string; locale: Locale }) {
