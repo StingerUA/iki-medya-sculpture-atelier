@@ -25,9 +25,6 @@ download \
   "https://raw.githubusercontent.com/edent/PirateMuseum/master/obj/venus32k.obj" \
   "$MODEL_TMP_DIR/venus-de-milo.obj"
 download \
-  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Diskoskasteren_(Discobolos)_-_KAS1549.stl" \
-  "$MODEL_TMP_DIR/discobolus.stl"
-download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/Scan_the_World_-_The_Thinker_(Auguste_Rodin).stl" \
   "$MODEL_TMP_DIR/the-thinker.stl"
 download \
@@ -36,9 +33,6 @@ download \
 download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/Venus_med_apple_(SMK_KMS6004,_Scan_the_World).stl" \
   "$MODEL_TMP_DIR/venus-with-the-apple.stl"
-download \
-  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Scan-the-World-msr-socrates-5.stl" \
-  "$MODEL_TMP_DIR/socrates-bust.stl"
 download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/25-msr-cleopatre-v-5.stl" \
   "$MODEL_TMP_DIR/cleopatra-v-portrait.stl"
@@ -58,15 +52,11 @@ download \
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb" 32000
 python3 scripts/convert-sculpture.py \
-  "$MODEL_TMP_DIR/discobolus.stl" "$MODEL_DIR/discobolus.glb" 250000
-python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/the-thinker.stl" "$MODEL_DIR/the-thinker.glb" 120000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/laocoon-group.stl" "$MODEL_DIR/laocoon-group.glb" 300000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-with-the-apple.stl" "$MODEL_DIR/venus-with-the-apple.glb" 300000
-python3 scripts/convert-sculpture.py \
-  "$MODEL_TMP_DIR/socrates-bust.stl" "$MODEL_DIR/socrates-bust.glb" 220000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/cleopatra-v-portrait.stl" "$MODEL_DIR/cleopatra-v-portrait.glb" 220000
 python3 scripts/convert-sculpture.py \
