@@ -95,5 +95,7 @@ download "$MARBLE_BASE/jpg/1k/marble_bust_01/marble_bust_01_nor_gl_1k.jpg" "$MAR
 download "$MARBLE_BASE/jpg/1k/marble_bust_01/marble_bust_01_rough_1k.jpg" "$MARBLE_TMP/textures/marble_bust_01_rough_1k.jpg"
 pack_to_glb "$MARBLE_TMP/marble_bust_01_1k.gltf" "$MODEL_DIR/marble-bust.glb"
 
+python3 scripts/verify-glb-normals.py "$MODEL_DIR"/*.glb
+
 echo "Prepared $(find "$MODEL_DIR" -maxdepth 1 -name '*.glb' | wc -l) AR-ready GLB models."
 du -h "$MODEL_DIR"/*.glb

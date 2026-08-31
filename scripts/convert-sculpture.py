@@ -9,6 +9,17 @@ from pathlib import Path
 import trimesh
 
 
+def apply_smooth_normals(mesh: trimesh.Trimesh) -> None:
+    """Weld coincident vertices and generate angle-weighted smooth normals."""
+    mesh.merge_vertices(merge_tex=True, merge_norm=True)
+    mesh.vertex_normals = trimesh.geometry.weighted_vertex_normals(
+        vertex_count=len(mesh.vertices),
+        faces=mesh.faces,
+        face_normals=mesh.face_normals,
+        face_angles=mesh.face_angles,
+    )
+
+
 def main() -> None:
     if len(sys.argv) not in (3, 4):
         raise SystemExit("Usage: convert-sculpture.py INPUT OUTPUT [TARGET_FACES]")
@@ -28,12 +39,14 @@ def main() -> None:
 
     mesh.remove_unreferenced_vertices()
     mesh.fix_normals(multibody=False)
+    apply_smooth_normals(mesh)
     original_faces = len(mesh.faces)
 
     if target_faces and original_faces > target_faces:
         mesh = mesh.simplify_quadric_decimation(face_count=target_faces)
         mesh.remove_unreferenced_vertices()
         mesh.fix_normals(multibody=False)
+        apply_smooth_normals(mesh)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     mesh.export(output_path, file_type="glb")
