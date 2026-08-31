@@ -31,8 +31,8 @@ download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/Scan_the_World_-_The_Thinker_(Auguste_Rodin).stl" \
   "$MODEL_TMP_DIR/the-thinker.stl"
 download \
-  "https://commons.wikimedia.org/wiki/Special:Redirect/file/David_(Michelangelo).stl" \
-  "$MODEL_TMP_DIR/michelangelo-david.stl"
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Scan_the_World_-_Laocoon_Group.stl" \
+  "$MODEL_TMP_DIR/laocoon-group.stl"
 download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/Venus_med_apple_(SMK_KMS6004,_Scan_the_World).stl" \
   "$MODEL_TMP_DIR/venus-with-the-apple.stl"
@@ -62,7 +62,7 @@ python3 scripts/convert-sculpture.py \
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/the-thinker.stl" "$MODEL_DIR/the-thinker.glb" 120000
 python3 scripts/convert-sculpture.py \
-  "$MODEL_TMP_DIR/michelangelo-david.stl" "$MODEL_DIR/michelangelo-david.glb" 300000
+  "$MODEL_TMP_DIR/laocoon-group.stl" "$MODEL_DIR/laocoon-group.glb" 300000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-with-the-apple.stl" "$MODEL_DIR/venus-with-the-apple.glb" 300000
 python3 scripts/convert-sculpture.py \
