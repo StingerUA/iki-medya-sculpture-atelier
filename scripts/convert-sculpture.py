@@ -10,8 +10,7 @@ import trimesh
 
 
 def apply_smooth_normals(mesh: trimesh.Trimesh) -> None:
-    """Weld coincident vertices and generate angle-weighted smooth normals."""
-    mesh.merge_vertices(merge_tex=True, merge_norm=True)
+    """Generate angle-weighted smooth normals for the processed indexed mesh."""
     mesh.vertex_normals = trimesh.geometry.weighted_vertex_normals(
         vertex_count=len(mesh.vertices),
         faces=mesh.faces,
