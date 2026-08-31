@@ -6,17 +6,25 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import numpy as np
 import trimesh
 
 
 def apply_smooth_normals(mesh: trimesh.Trimesh) -> None:
-    """Generate angle-weighted smooth normals for the processed indexed mesh."""
-    mesh.vertex_normals = trimesh.geometry.weighted_vertex_normals(
-        vertex_count=len(mesh.vertices),
-        faces=mesh.faces,
-        face_normals=mesh.face_normals,
-        face_angles=mesh.face_angles,
+    """Generate fast area-weighted smooth normals for the indexed mesh."""
+    triangles = mesh.vertices[mesh.faces]
+    weighted_faces = np.cross(
+        triangles[:, 1] - triangles[:, 0],
+        triangles[:, 2] - triangles[:, 0],
     )
+    vertex_normals = np.zeros_like(mesh.vertices, dtype=np.float64)
+    for corner in range(3):
+        np.add.at(vertex_normals, mesh.faces[:, corner], weighted_faces)
+
+    lengths = np.linalg.norm(vertex_normals, axis=1)
+    valid = lengths > np.finfo(np.float64).eps
+    vertex_normals[valid] /= lengths[valid, None]
+    mesh.vertex_normals = vertex_normals
 
 
 def main() -> None:
