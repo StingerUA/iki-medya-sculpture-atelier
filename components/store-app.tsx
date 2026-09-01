@@ -18,6 +18,14 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -285,8 +293,9 @@ function shuffleProducts(items: Product[]) {
 function HomeView({ locale, navigate, onAdd }: { locale: Locale; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
   const homeProducts = React.useMemo(() => shuffleProducts(products), []);
+  const marbleBust = products.find((product) => product.slug === "marble-bust") ?? products[0];
   return <>
-    <section className="hero-section"><div className="hero-copy"><p className="eyebrow">{t.heroKicker}</p><h1>{t.heroTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><p className="hero-text">{t.heroText}</p><div className="hero-buttons"><Button className="square-button" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ArrowRight /></Button><Button variant="outline" className="square-button" onClick={() => navigate(pathFor(locale, "contact"))}>{t.custom}</Button></div></div><div className="hero-art"><ModelPreview src={homeProducts[0].model} alt={homeProducts[0].name} className="hero-model" locale={locale} /><div className="hero-art-label"><Scan />{t.arReady}</div></div></section>
+    <section className="hero-section"><div className="hero-copy"><p className="eyebrow">{t.heroKicker}</p><h1>{t.heroTitle.split("\n").map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</h1><p className="hero-text">{t.heroText}</p><div className="hero-buttons"><Button className="square-button" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ArrowRight /></Button><Button variant="outline" className="square-button" onClick={() => navigate(pathFor(locale, "contact"))}>{t.custom}</Button></div></div><div className="hero-art"><ModelPreview src={marbleBust.model} alt={marbleBust.name} className="hero-model" locale={locale} poster={marbleBust.poster} /><div className="hero-art-label"><Scan />{t.arReady}</div></div></section>
     <section className="collection-preview section-pad"><div className="section-heading"><div><p className="eyebrow">01 / {t.collection}</p><h2>{t.collection}</h2></div><p>{t.collectionText}</p></div><div className="featured-grid">{homeProducts.slice(0, 3).map((product, index) => <ProductCard key={product.slug} product={product} locale={locale} index={index + 1} navigate={navigate} onAdd={onAdd} />)}</div><button className="wide-link" onClick={() => navigate(pathFor(locale, "catalog"))}>{t.seeCollection}<ChevronRight /></button></section>
     <section className="process-section section-pad"><p className="eyebrow">02 / {t.process}</p><div className="process-grid">{t.steps.map((step, index) => <article key={step}><span>0{index + 1}</span><h3>{step}</h3><p>{t.processText[index]}</p></article>)}</div></section>
   </>;
@@ -308,13 +317,56 @@ function CatalogView({ locale, navigate, onAdd }: { locale: Locale; navigate: (p
 
 function ProductCard({ product, locale, index, navigate, onAdd, priority = true }: { product: Product; locale: Locale; index: number; navigate: (path: string) => void; onAdd: (slug: string) => void; priority?: boolean }) {
   const t = copy[locale];
-  return <article className="product-card"><div className="product-image"><ModelPreview src={product.model} alt={product.name} className="card-model" locale={locale} poster={priority ? undefined : product.poster} loading={priority ? "eager" : "lazy"} /><span className="product-index">{index.toString().padStart(2, "0")}</span><span className="ar-badge"><Scan />AR</span></div><div className="product-meta"><div><p>{styleLabels[locale][product.style]} / {product.height} cm</p><h3>{product.name}</h3></div><strong>{formatPrice(product.price, locale)}</strong></div><div className="product-actions"><Button variant="outline" className="square-button" onClick={() => navigate(productPath(locale, product.slug))}>{t.details}</Button><Button className="square-button" onClick={() => onAdd(product.slug)}>{t.add}<Plus /></Button></div></article>;
+  return <article className="product-card"><div className="product-image"><ProductGallery product={product} locale={locale} priority={priority} /><span className="product-index">{index.toString().padStart(2, "0")}</span><span className="ar-badge"><Scan />AR</span></div><div className="product-meta"><div><p>{styleLabels[locale][product.style]} / {product.height} cm</p><h3>{product.name}</h3></div><strong>{formatPrice(product.price, locale)}</strong></div><div className="product-actions"><Button variant="outline" className="square-button" onClick={() => navigate(productPath(locale, product.slug))}>{t.details}</Button><Button className="square-button" onClick={() => onAdd(product.slug)}>{t.add}<Plus /></Button></div></article>;
+}
+
+function ProductGallery({ product, locale, priority }: { product: Product; locale: Locale; priority: boolean }) {
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [selected, setSelected] = React.useState(0);
+  const [modelProgress, setModelProgress] = React.useState<{ percentage: number; status: ModelLoadState["status"] }>({ percentage: 0, status: "loading" });
+  const slideCount = product.gallery.length + 1;
+
+  React.useEffect(() => {
+    if (!api) return;
+    const syncSelection = () => setSelected(api.selectedScrollSnap());
+    syncSelection();
+    api.on("select", syncSelection);
+    api.on("reInit", syncSelection);
+    return () => {
+      api.off("select", syncSelection);
+      api.off("reInit", syncSelection);
+    };
+  }, [api]);
+
+  return <div className="product-gallery">
+    <Carousel setApi={setApi} opts={{ align: "start", watchDrag: (_api, event) => !(event.target as Element).closest("model-viewer") }} className="product-gallery-carousel" aria-label={locale === "tr" ? `${product.name} görsel galerisi` : `${product.name} image gallery`}>
+      <CarouselContent className="product-gallery-track">
+        {product.gallery.map((image, imageIndex) => <CarouselItem key={image.src} className="product-gallery-slide">
+          <img src={image.src} alt={locale === "tr" ? `${product.name}, görünüm ${imageIndex + 1}` : `${product.name}, view ${imageIndex + 1}`} loading={priority && imageIndex === 0 ? "eager" : "lazy"} />
+          <a className="gallery-credit" href={image.sourceUrl} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>{image.credit}</a>
+        </CarouselItem>)}
+        <CarouselItem className="product-gallery-slide product-gallery-model-slide">
+          <ModelPreview src={product.model} alt={product.name} className="card-model" locale={locale} poster={product.poster} loading={priority ? "eager" : "lazy"} showLoadingOverlay={false} onLoadStateChange={setModelProgress} />
+        </CarouselItem>
+      </CarouselContent>
+      <CarouselPrevious className="gallery-arrow gallery-arrow--previous" aria-label={locale === "tr" ? "Önceki görünüm" : "Previous view"} />
+      <CarouselNext className="gallery-arrow gallery-arrow--next" aria-label={locale === "tr" ? "Sonraki görünüm" : "Next view"} />
+    </Carousel>
+    {modelProgress.status !== "loaded" ? <div className={`model-loading gallery-model-loading${modelProgress.status === "error" ? " model-loading--error" : ""}`} role="status" aria-live="polite">
+      <div className="model-loading-label"><span>{modelProgress.status === "error" ? (locale === "tr" ? "Model yüklenemedi" : "Model failed to load") : (locale === "tr" ? "3D model arka planda yükleniyor" : "3D model loading in background")}</span><strong>{modelProgress.status === "error" ? "!" : `${modelProgress.percentage}%`}</strong></div>
+      <Progress value={modelProgress.status === "error" ? 0 : modelProgress.percentage} className="model-loading-progress" aria-label={locale === "tr" ? `Model yükleme yüzde ${modelProgress.percentage}` : `Model loading ${modelProgress.percentage} percent`} />
+    </div> : null}
+    <div className="gallery-pagination" aria-label={locale === "tr" ? "Galeri sayfaları" : "Gallery pages"}>
+      {Array.from({ length: slideCount }, (_, slideIndex) => <button key={slideIndex} type="button" aria-label={locale === "tr" ? `${slideIndex + 1}. görünüme git` : `Go to view ${slideIndex + 1}`} aria-current={selected === slideIndex ? "true" : undefined} onClick={() => api?.scrollTo(slideIndex)}><span /></button>)}
+    </div>
+    <span className="gallery-counter">{String(selected + 1).padStart(2, "0")} / {String(slideCount).padStart(2, "0")}{selected === slideCount - 1 ? " · 3D" : ""}</span>
+  </div>;
 }
 
 function ProductView({ locale, product, navigate, onAdd }: { locale: Locale; product: Product; navigate: (path: string) => void; onAdd: (slug: string) => void }) {
   const t = copy[locale];
   const specs = [[t.dimensions, `${product.height} cm`], [t.material, product.material], [t.finish, product.color], [t.leadTime, product.leadTime]];
-  return <section className="product-page section-pad"><button className="back-link" onClick={() => navigate(pathFor(locale, "catalog"))}>← {t.catalog}</button><div className="product-detail-grid"><div className="detail-image"><ModelPreview src={product.model} alt={product.name} className="detail-model" locale={locale} /><span className="ar-badge"><Scan />AR</span></div><div className="detail-copy"><p className="eyebrow">{styleLabels[locale][product.style]} / {product.height} cm</p><h1>{product.name}</h1><p className="detail-price">{formatPrice(product.price, locale)}</p><p className="detail-description">{product.description[locale]}</p><Button className="square-button add-large" onClick={() => onAdd(product.slug)}>{t.add}<ShoppingBag /></Button><div className="spec-list"><p className="eyebrow">{t.specs}</p>{specs.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></div></div><div className="ar-section"><div><p className="eyebrow">03 / AR</p><h2>{t.arTitle}</h2><p>{t.arText}</p><p className="model-source"><span>{t.modelSource}</span><a href={product.source.sourceUrl} target="_blank" rel="noreferrer">{product.source.title}</a><small>{product.source.creator} · <a href={product.source.licenseUrl} target="_blank" rel="noreferrer">{product.source.licenseName}</a></small></p></div><ModelViewer src={product.model} alt={product.name} arLabel={locale === "tr" ? "AR'da Gör" : "View in AR"} locale={locale} /></div></section>;
+  return <section className="product-page section-pad"><button className="back-link" onClick={() => navigate(pathFor(locale, "catalog"))}>← {t.catalog}</button><div className="product-detail-grid"><div className="detail-image"><ModelPreview src={product.model} alt={product.name} className="detail-model" locale={locale} poster={product.poster} /><span className="ar-badge"><Scan />AR</span></div><div className="detail-copy"><p className="eyebrow">{styleLabels[locale][product.style]} / {product.height} cm</p><h1>{product.name}</h1><p className="detail-price">{formatPrice(product.price, locale)}</p><p className="detail-description">{product.description[locale]}</p><Button className="square-button add-large" onClick={() => onAdd(product.slug)}>{t.add}<ShoppingBag /></Button><div className="spec-list"><p className="eyebrow">{t.specs}</p>{specs.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></div></div><div className="ar-section"><div><p className="eyebrow">03 / AR</p><h2>{t.arTitle}</h2><p>{t.arText}</p><p className="model-source"><span>{t.modelSource}</span><a href={product.source.sourceUrl} target="_blank" rel="noreferrer">{product.source.title}</a><small>{product.source.creator} · <a href={product.source.licenseUrl} target="_blank" rel="noreferrer">{product.source.licenseName}</a></small></p></div><ModelViewer src={product.model} alt={product.name} arLabel={locale === "tr" ? "AR'da Gör" : "View in AR"} locale={locale} /></div></section>;
 }
 
 function useModelViewerScript() {
@@ -337,9 +389,10 @@ type ModelLoadState = {
   status: "loading" | "loaded" | "error";
 };
 
-function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, loading = "eager" }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string; poster?: string; loading?: "eager" | "lazy" }) {
+function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, loading = "eager", showLoadingOverlay = true, onLoadStateChange }: { src: string; alt: string; className: string; locale: Locale; ar?: boolean; arLabel?: string; poster?: string; loading?: "eager" | "lazy"; showLoadingOverlay?: boolean; onLoadStateChange?: (state: { percentage: number; status: ModelLoadState["status"] }) => void }) {
   useModelViewerScript();
   const presentation = products.find((product) => product.model === src);
+  const resolvedPoster = poster ?? presentation?.poster;
   const preferredBackground = presentation?.initialBackground ?? "studio";
   const [backgroundSelection, setBackgroundSelection] = React.useState<{ src: string; value: ModelBackground }>({ src, value: preferredBackground });
   const background = backgroundSelection.src === src ? backgroundSelection.value : preferredBackground;
@@ -349,6 +402,10 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, 
   const viewerRef = React.useRef<ModelViewerElement | null>(null);
   const currentLoadState = loadState.src === src ? loadState : { src, progress: 0, status: "loading" as const };
   const loadPercentage = Math.min(100, Math.max(0, Math.round(currentLoadState.progress * 100)));
+
+  React.useEffect(() => {
+    onLoadStateChange?.({ percentage: loadPercentage, status: currentLoadState.status });
+  }, [currentLoadState.status, loadPercentage, onLoadStateChange]);
 
   React.useEffect(() => {
     let mounted = true;
@@ -409,9 +466,9 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, 
       ref: viewerRef,
       src,
       alt,
-      poster,
+      poster: resolvedPoster,
       loading,
-      reveal: poster ? "auto" : undefined,
+      reveal: resolvedPoster ? "auto" : undefined,
       orientation: presentation?.orientation ?? "0deg 0deg 0deg",
       exposure: "0.72",
       ar,
@@ -433,7 +490,7 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, 
 
   return <div className={`model-stage ${className}-stage model-stage--${background}`}>
     {viewer}
-    {currentLoadState.status !== "loaded" ? <div className={`model-loading${currentLoadState.status === "error" ? " model-loading--error" : ""}`} role="status" aria-live="polite">
+    {showLoadingOverlay && currentLoadState.status !== "loaded" ? <div className={`model-loading${currentLoadState.status === "error" ? " model-loading--error" : ""}`} role="status" aria-live="polite">
       <div className="model-loading-label"><span>{currentLoadState.status === "error" ? (locale === "tr" ? "Model yüklenemedi" : "Model failed to load") : (locale === "tr" ? "3D model yükleniyor" : "Loading 3D model")}</span><strong>{currentLoadState.status === "error" ? "!" : `${loadPercentage}%`}</strong></div>
       <Progress value={currentLoadState.status === "error" ? 0 : loadPercentage} className="model-loading-progress" aria-label={locale === "tr" ? `Model yükleme yüzde ${loadPercentage}` : `Model loading ${loadPercentage} percent`} />
     </div> : null}
@@ -446,8 +503,8 @@ function ModelStage({ src, alt, className, locale, ar = false, arLabel, poster, 
   </div>;
 }
 
-function ModelPreview({ src, alt, className, locale, poster, loading }: { src: string; alt: string; className: string; locale: Locale; poster?: string; loading?: "eager" | "lazy" }) {
-  return <ModelStage src={src} alt={alt} className={className} locale={locale} poster={poster} loading={loading} />;
+function ModelPreview({ src, alt, className, locale, poster, loading, showLoadingOverlay, onLoadStateChange }: { src: string; alt: string; className: string; locale: Locale; poster?: string; loading?: "eager" | "lazy"; showLoadingOverlay?: boolean; onLoadStateChange?: (state: { percentage: number; status: ModelLoadState["status"] }) => void }) {
+  return <ModelStage src={src} alt={alt} className={className} locale={locale} poster={poster} loading={loading} showLoadingOverlay={showLoadingOverlay} onLoadStateChange={onLoadStateChange} />;
 }
 
 function ModelViewer({ src, alt, arLabel, locale }: { src: string; alt: string; arLabel: string; locale: Locale }) {

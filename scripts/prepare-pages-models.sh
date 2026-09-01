@@ -34,8 +34,8 @@ download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/Venus_med_apple_(SMK_KMS6004,_Scan_the_World).stl" \
   "$MODEL_TMP_DIR/venus-with-the-apple.stl"
 download \
-  "https://commons.wikimedia.org/wiki/Special:Redirect/file/25-msr-cleopatre-v-5.stl" \
-  "$MODEL_TMP_DIR/cleopatra-v-portrait.stl"
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/40-msr-hercules-body-10.stl" \
+  "$MODEL_TMP_DIR/resting-hercules-torso.stl"
 download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Column_Krater.stl" \
   "$MODEL_TMP_DIR/greek-column-krater.stl"
@@ -58,7 +58,7 @@ python3 scripts/convert-sculpture.py \
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-with-the-apple.stl" "$MODEL_DIR/venus-with-the-apple.glb" 300000
 python3 scripts/convert-sculpture.py \
-  "$MODEL_TMP_DIR/cleopatra-v-portrait.stl" "$MODEL_DIR/cleopatra-v-portrait.glb" 220000
+  "$MODEL_TMP_DIR/resting-hercules-torso.stl" "$MODEL_DIR/resting-hercules-torso.glb" 220000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/greek-column-krater.stl" "$MODEL_DIR/greek-column-krater.glb" 100000
 python3 scripts/convert-sculpture.py \

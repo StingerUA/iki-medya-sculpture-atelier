@@ -1,5 +1,11 @@
 export type Locale = "tr" | "en";
 
+export type GalleryImage = {
+  src: string;
+  sourceUrl: string;
+  credit: string;
+};
+
 export type Product = {
   slug: string;
   name: string;
@@ -8,6 +14,7 @@ export type Product = {
   price: number;
   model: string;
   poster: string;
+  gallery: GalleryImage[];
   orientation?: string;
   initialBackground?: "studio" | "stone" | "night";
   color: string;
@@ -26,6 +33,20 @@ export type Product = {
 const modelBase = "https://stingerua.github.io/iki-medya-sculpture-atelier/models";
 const modelUrl = (file: string) => `${modelBase}/${file}`;
 
+const commonsImage = (file: string, credit: string): GalleryImage => ({
+  src: `https://commons.wikimedia.org/wiki/Special:Redirect/file/${encodeURIComponent(file)}?width=1200`,
+  sourceUrl: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file)}`,
+  credit,
+});
+
+const polyHavenImage = (asset: string, view: "primary" | "clay" | "orth_front", credit: string): GalleryImage => ({
+  src: view === "primary"
+    ? `https://cdn.polyhaven.com/asset_img/primary/${asset}.png?height=1200&quality=95`
+    : `https://cdn.polyhaven.com/asset_img/renders/${asset}/${view}.png?height=1200&quality=95`,
+  sourceUrl: `https://polyhaven.com/a/${asset}`,
+  credit,
+});
+
 export const products: Product[] = [
   {
     slug: "venus-de-milo",
@@ -34,7 +55,12 @@ export const products: Product[] = [
     height: 195,
     price: 128000,
     model: modelUrl("venus-de-milo.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Scan_the_World_-_Venus_de_Milo.stl/960px-Scan_the_World_-_Venus_de_Milo.stl.png",
+    poster: commonsImage("Venus de Milo Louvre Ma399 n4.jpg", "Jastrow · Wikimedia Commons").src,
+    gallery: [
+      commonsImage("Venus de Milo Louvre Ma399 n4.jpg", "Jastrow · Wikimedia Commons"),
+      commonsImage("Venus de Milo Louvre Ma399.jpg", "Jastrow · Wikimedia Commons"),
+      commonsImage("Venus de Milo Louvre Ma399 n13.jpg", "Jastrow · Wikimedia Commons"),
+    ],
     initialBackground: "night",
     color: "Carrara beyazı / Carrara white",
     material: "PETG + mineral mermer yüzey / PETG + mineral marble finish",
@@ -58,8 +84,13 @@ export const products: Product[] = [
     height: 145,
     price: 98000,
     model: modelUrl("the-thinker.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Scan_the_World_-_The_Thinker_%28Auguste_Rodin%29.stl/960px-Scan_the_World_-_The_Thinker_%28Auguste_Rodin%29.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Le Penseur Musée Rodin Paris S.1295.jpg", "Musée Rodin · Wikimedia Commons").src,
+    gallery: [
+      commonsImage("Le Penseur Musée Rodin Paris S.1295.jpg", "Musée Rodin · Wikimedia Commons"),
+      commonsImage("The Thinker Rodin Phila.JPG", "Sdwelch1031 · Wikimedia Commons"),
+      commonsImage("Maryhill Museum - Rodin - The Thinker - 01.jpg", "Joe Mabel · Wikimedia Commons"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Patinalı bronz / Patinated bronze",
     material: "PETG + metalik epoksi yüzey / PETG + metallic epoxy finish",
@@ -83,8 +114,13 @@ export const products: Product[] = [
     height: 210,
     price: 168000,
     model: modelUrl("laocoon-group.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Scan_the_World_-_Laocoon_Group.stl/960px-Scan_the_World_-_Laocoon_Group.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Laocoön and His Sons in Vatican museum.jpg", "Wikimedia Commons").src,
+    gallery: [
+      commonsImage("Laocoön and His Sons in Vatican museum.jpg", "Wikimedia Commons"),
+      commonsImage("Laocoon group sculpture.jpg", "Dom Crossley · Wikimedia Commons"),
+      commonsImage("Laocoon and His Sons.jpg", "Wikimedia Commons"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Müze beyazı / Museum white",
     material: "PETG + mineral mermer kaplama / PETG + mineral marble coating",
@@ -108,7 +144,12 @@ export const products: Product[] = [
     height: 170,
     price: 112000,
     model: modelUrl("gothic-guardian.glb"),
-    poster: "https://cdn.polyhaven.com/asset_img/thumbs/gothic_statue.png?format=png",
+    poster: polyHavenImage("gothic_statue", "primary", "Benny Weimer · Poly Haven").src,
+    gallery: [
+      polyHavenImage("gothic_statue", "primary", "Benny Weimer · Poly Haven"),
+      polyHavenImage("gothic_statue", "clay", "Benny Weimer · Poly Haven"),
+      polyHavenImage("gothic_statue", "orth_front", "Benny Weimer · Poly Haven"),
+    ],
     color: "Eskitilmiş taş / Weathered stone",
     material: "PLA Pro + mineral doku / PLA Pro + mineral texture",
     leadTime: "24–34 gün / days",
@@ -126,19 +167,24 @@ export const products: Product[] = [
   },
   {
     slug: "marble-bust",
-    name: "Marble Bust — DECOR / 05",
+    name: "Caesar Marble Bust — DECOR / 05",
     style: "decorative",
     height: 80,
     price: 68500,
     model: modelUrl("marble-bust.glb"),
-    poster: "https://cdn.polyhaven.com/asset_img/thumbs/marble_bust_01.png?format=png",
+    poster: polyHavenImage("marble_bust_01", "primary", "Rico Cilliers · Poly Haven").src,
+    gallery: [
+      polyHavenImage("marble_bust_01", "primary", "Rico Cilliers · Poly Haven"),
+      polyHavenImage("marble_bust_01", "clay", "Rico Cilliers · Poly Haven"),
+      polyHavenImage("marble_bust_01", "orth_front", "Rico Cilliers · Poly Haven"),
+    ],
     initialBackground: "night",
     color: "Damarlı mermer / Veined marble",
     material: "PETG + mermer efektli epoksi / PETG + marble-effect epoxy",
     leadTime: "18–26 gün / days",
     description: {
-      tr: "İnce yüz hatları, hafif aşınma ve doğal taş damarları içeren 17 bin üçgenli Rönesans üslubunda büst. Konut, otel ve seçkin mağaza dekorasyonu için dengeli bir sanat objesidir.",
-      en: "A 17K-triangle Renaissance-style bust with finely carved features, subtle weathering and natural stone veining. A balanced art object for residences, hospitality and premium retail interiors.",
+      tr: "Sezar portrelerinin anıtsal karakterinden esinlenen; ince yüz hatları, hafif aşınma ve doğal taş damarları içeren 17 bin üçgenli mermer büst. Konut, otel ve seçkin mağaza dekorasyonu için dengeli bir sanat objesidir.",
+      en: "A 17K-triangle marble bust inspired by the monumental character of Caesar portraits, with finely carved features, subtle weathering and natural stone veining. A balanced art object for residences, hospitality and premium retail interiors.",
     },
     source: {
       title: "Marble Bust 01",
@@ -155,8 +201,13 @@ export const products: Product[] = [
     height: 110,
     price: 49500,
     model: modelUrl("greek-column-krater.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/3D_Model_Column_Krater.stl/960px-3D_Model_Column_Krater.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Terracotta column-krater (bowl for mixing wine and water) MET DP118157.jpg", "The Metropolitan Museum of Art").src,
+    gallery: [
+      commonsImage("Terracotta column-krater (bowl for mixing wine and water) MET DP118157.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Terracotta column-krater (vase for mixing wine and water) MET DP233560.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Terracotta column-krater (bowl for mixing wine and water) MET DP145998.jpg", "The Metropolitan Museum of Art"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Tek renk antik bronz / Monochrome antique bronze",
     material: "PETG + tek renk mineral yüzey / PETG + monochrome mineral finish",
@@ -180,8 +231,13 @@ export const products: Product[] = [
     height: 165,
     price: 116000,
     model: modelUrl("venus-with-the-apple.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Venus_med_apple_%28SMK_KMS6004%2C_Scan_the_World%29.stl/960px-Venus_med_apple_%28SMK_KMS6004%2C_Scan_the_World%29.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Thorvaldsens Venus.jpg", "Gunnar Bach Pedersen · Wikimedia Commons").src,
+    gallery: [
+      commonsImage("Thorvaldsens Venus.jpg", "Gunnar Bach Pedersen · Wikimedia Commons"),
+      commonsImage("Venus with Apple by Bertel Thorvaldsen - Statens Museum for Kunst, Copenhagen - DSC08241.JPG", "Wikimedia Commons"),
+      commonsImage("Bertel Thorvaldsen, Venus med æblet, 1809, KMS6004, Statens Museum for Kunst.jpg", "Statens Museum for Kunst"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Porselen beyazı / Porcelain white",
     material: "PLA Pro + mat mineral kaplama / PLA Pro + matte mineral coating",
@@ -199,28 +255,33 @@ export const products: Product[] = [
     },
   },
   {
-    slug: "cleopatra-v-portrait",
-    name: "Cleopatra V Portrait — ANTIQUITY / 08",
+    slug: "resting-hercules-torso",
+    name: "Resting Hercules Torso — ANTIQUITY / 08",
     style: "ancient",
-    height: 90,
-    price: 76000,
-    model: modelUrl("cleopatra-v-portrait.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Ra80-HDD-b.jpg/1000px-Ra80-HDD-b.jpg",
-    orientation: "-90deg 0deg 0deg",
+    height: 115,
+    price: 84000,
+    model: modelUrl("resting-hercules-torso.glb"),
+    poster: commonsImage("(Toulouse) Hercule au repos - Musée Saint-Raymond, Ra 115.jpg", "Musée Saint-Raymond · Wikimedia Commons").src,
+    gallery: [
+      commonsImage("(Toulouse) Hercule au repos - Musée Saint-Raymond, Ra 115.jpg", "Musée Saint-Raymond · Wikimedia Commons"),
+      commonsImage("MSR-ra-115-2-DM.jpg", "Musée Saint-Raymond · Wikimedia Commons"),
+      commonsImage("MSR-ra-115-3-DM.jpg", "Musée Saint-Raymond · Wikimedia Commons"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Kum taşı / Sandstone",
     material: "PLA Pro + tek renk mineral yüzey / PLA Pro + monochrome mineral finish",
     leadTime: "20–30 gün / days",
     description: {
-      tr: "MÖ 1. yüzyıla tarihlenen ve Kleopatra V ile ilişkilendirilen antik portre başının ayrıntılı taraması. Müze sergileri, tarih temalı oteller ve seçkin iç mekânlar için tek renkli olarak üretilir.",
-      en: "A detailed scan of a first-century BCE portrait head associated with Cleopatra V. Produced as a monochrome statement piece for museum displays, history-led hospitality and refined interiors.",
+      tr: "Nemea aslanı postuyla betimlenen, Farnese tipindeki dinlenen Herkül gövdesinin ayrıntılı müze taraması. Heykelsi kırık yüzeyleriyle galeri, otel ve seçkin iç mekânlarda güçlü bir tek renkli odak oluşturur.",
+      en: "A detailed museum scan of a resting Hercules torso of the Farnese type, depicted with the Nemean lion skin. Its sculptural fragmented surfaces create a strong monochrome focal point for galleries, hospitality and refined interiors.",
     },
     source: {
-      title: "Portrait associated with Cleopatra V — 3D scan",
+      title: "Resting Hercules, Ra 115 — 3D scan",
       creator: "Scan the World / Musée Saint-Raymond",
       licenseName: "CC BY-SA 4.0",
       licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-      sourceUrl: "https://commons.wikimedia.org/wiki/File:25-msr-cleopatre-v-5.stl",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:40-msr-hercules-body-10.stl",
     },
   },
   {
@@ -230,8 +291,13 @@ export const products: Product[] = [
     height: 125,
     price: 54000,
     model: modelUrl("greek-neck-amphora.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/3D_Model_Neck_Amphora.stl/960px-3D_Model_Neck_Amphora.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Neck-amphora MET DP-1487-002.jpg", "The Metropolitan Museum of Art").src,
+    gallery: [
+      commonsImage("Neck-amphora MET DP-1487-002.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Terracotta neck-amphora (jar) MET DT202045.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Neck-amphora MET DP-2916-002.jpg", "The Metropolitan Museum of Art"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Tek renk terrakota / Monochrome terracotta",
     material: "PLA Pro + mat seramik yüzey / PLA Pro + matte ceramic finish",
@@ -255,8 +321,13 @@ export const products: Product[] = [
     height: 105,
     price: 51000,
     model: modelUrl("greek-hydria.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/3D_Model_Hydria.stl/960px-3D_Model_Hydria.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Terracotta hydria (water jar) MET DP229433.jpg", "The Metropolitan Museum of Art").src,
+    gallery: [
+      commonsImage("Terracotta hydria (water jar) MET DP229433.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Terracotta hydria (water jar) MET DT5872.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Terracotta hydria (water jar) MET DP273724.jpg", "The Metropolitan Museum of Art"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Tek renk taş beyazı / Monochrome stone white",
     material: "PETG + mineral taş kaplama / PETG + mineral stone coating",
@@ -280,8 +351,13 @@ export const products: Product[] = [
     height: 150,
     price: 62500,
     model: modelUrl("greek-loutrophoros.glb"),
-    poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/3D_Model_Loutrophoros.stl/960px-3D_Model_Loutrophoros.stl.png",
-    orientation: "-90deg 0deg 0deg",
+    poster: commonsImage("Terracotta loutrophoros (ceremonial vase for water) MET DT3849.jpg", "The Metropolitan Museum of Art").src,
+    gallery: [
+      commonsImage("Terracotta loutrophoros (ceremonial vase for water) MET DT3849.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Terracotta loutrophoros (ceremonial vase for water) MET DT7201.jpg", "The Metropolitan Museum of Art"),
+      commonsImage("Fragmentary terracotta loutrophoros (ceremonial vase for water) MET DP145793.jpg", "The Metropolitan Museum of Art"),
+    ],
+    orientation: "0deg -90deg 0deg",
     initialBackground: "night",
     color: "Tek renk fildişi / Monochrome ivory",
     material: "PLA Pro + mat mineral kaplama / PLA Pro + matte mineral coating",
