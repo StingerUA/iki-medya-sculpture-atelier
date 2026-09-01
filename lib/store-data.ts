@@ -8,6 +8,7 @@ export type Product = {
   price: number;
   model: string;
   poster: string;
+  orientation?: string;
   initialBackground?: "studio" | "stone" | "night";
   color: string;
   material: string;
@@ -58,6 +59,7 @@ export const products: Product[] = [
     price: 98000,
     model: modelUrl("the-thinker.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Scan_the_World_-_The_Thinker_%28Auguste_Rodin%29.stl/960px-Scan_the_World_-_The_Thinker_%28Auguste_Rodin%29.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Patinalı bronz / Patinated bronze",
     material: "PETG + metalik epoksi yüzey / PETG + metallic epoxy finish",
@@ -82,6 +84,7 @@ export const products: Product[] = [
     price: 168000,
     model: modelUrl("laocoon-group.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Scan_the_World_-_Laocoon_Group.stl/960px-Scan_the_World_-_Laocoon_Group.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Müze beyazı / Museum white",
     material: "PETG + mineral mermer kaplama / PETG + mineral marble coating",
@@ -153,6 +156,7 @@ export const products: Product[] = [
     price: 49500,
     model: modelUrl("greek-column-krater.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/3D_Model_Column_Krater.stl/960px-3D_Model_Column_Krater.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Tek renk antik bronz / Monochrome antique bronze",
     material: "PETG + tek renk mineral yüzey / PETG + monochrome mineral finish",
@@ -177,6 +181,7 @@ export const products: Product[] = [
     price: 116000,
     model: modelUrl("venus-with-the-apple.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Venus_med_apple_%28SMK_KMS6004%2C_Scan_the_World%29.stl/960px-Venus_med_apple_%28SMK_KMS6004%2C_Scan_the_World%29.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Porselen beyazı / Porcelain white",
     material: "PLA Pro + mat mineral kaplama / PLA Pro + matte mineral coating",
@@ -201,6 +206,7 @@ export const products: Product[] = [
     price: 76000,
     model: modelUrl("cleopatra-v-portrait.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Ra80-HDD-b.jpg/1000px-Ra80-HDD-b.jpg",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Kum taşı / Sandstone",
     material: "PLA Pro + tek renk mineral yüzey / PLA Pro + monochrome mineral finish",
@@ -225,6 +231,7 @@ export const products: Product[] = [
     price: 54000,
     model: modelUrl("greek-neck-amphora.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/3D_Model_Neck_Amphora.stl/960px-3D_Model_Neck_Amphora.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Tek renk terrakota / Monochrome terracotta",
     material: "PLA Pro + mat seramik yüzey / PLA Pro + matte ceramic finish",
@@ -249,6 +256,7 @@ export const products: Product[] = [
     price: 51000,
     model: modelUrl("greek-hydria.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/3D_Model_Hydria.stl/960px-3D_Model_Hydria.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Tek renk taş beyazı / Monochrome stone white",
     material: "PETG + mineral taş kaplama / PETG + mineral stone coating",
@@ -273,6 +281,7 @@ export const products: Product[] = [
     price: 62500,
     model: modelUrl("greek-loutrophoros.glb"),
     poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/3D_Model_Loutrophoros.stl/960px-3D_Model_Loutrophoros.stl.png",
+    orientation: "-90deg 0deg 0deg",
     initialBackground: "night",
     color: "Tek renk fildişi / Monochrome ivory",
     material: "PLA Pro + mat mineral kaplama / PLA Pro + matte mineral coating",
