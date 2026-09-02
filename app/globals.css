@@ -231,6 +231,8 @@ button { cursor: pointer; }
 .hero-section { min-height: calc(100vh - 76px); display: grid; grid-template-columns: 1.06fr .94fr; border-bottom: 1px solid #0a0a0a; }
 .hero-copy { display: flex; flex-direction: column; justify-content: center; padding: 70px clamp(24px, 6vw, 95px); border-right: 1px solid #0a0a0a; }
 .hero-copy h1 { margin: 42px 0 28px; font-size: clamp(4.5rem, 9vw, 10rem); font-weight: 900; letter-spacing: -.075em; line-height: .77; }
+.hero-title-line { display: block; }
+.hero-title-line + .hero-title-line { margin-top: .1em; }
 .hero-text { max-width: 610px; margin: 0; font-size: clamp(1rem, 1.35vw, 1.28rem); line-height: 1.55; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: 0; margin-top: 42px; }
 .square-button { min-height: 48px; border-radius: 0 !important; border-color: #0a0a0a !important; padding-inline: 20px; font-size: .75rem; font-weight: 800; letter-spacing: .045em; }
@@ -261,6 +263,7 @@ button { cursor: pointer; }
 .model-loading--error { background: #0a0a0a; color: #fff; }
 .model-loading--error .model-loading-progress { background: #484844 !important; }
 .hero-model-stage { min-height: 620px; }
+.hero-model-stage .model-loading { top: 66px; }
 .product-image > .model-stage, .detail-image > .model-stage { position: absolute; inset: 0; }
 .about-model-stage, .model-viewer-stage { min-height: inherit; }
 .model-viewer-stage { min-height: 650px; }
