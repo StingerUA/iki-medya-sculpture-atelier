@@ -54,6 +54,12 @@ const printablesImage = (filePath: string, credit: string): GalleryImage => ({
   credit,
 });
 
+const printablesModelImage = (model: string, filePath: string, credit: string): GalleryImage => ({
+  src: `https://media.printables.com/${filePath}`,
+  sourceUrl: `https://www.printables.com/model/${model}`,
+  credit,
+});
+
 export const products: Product[] = [
   {
     slug: "mustafa-kemal-ataturk-bust",
@@ -80,7 +86,7 @@ export const products: Product[] = [
         "OzzyOzil · Printables",
       ),
     ],
-    orientation: "90deg 180deg 0deg",
+    orientation: "0deg 90deg 0deg",
     exposure: 0.36,
     initialBackground: "night",
     color: "Mat bronz / Matte bronze",
@@ -422,6 +428,221 @@ export const products: Product[] = [
       licenseName: "CC BY-SA 4.0",
       licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
       sourceUrl: "https://commons.wikimedia.org/wiki/File:3D_Model_Loutrophoros.stl",
+    },
+  },
+  {
+    slug: "silent-dialogue",
+    name: "Silent Dialogue — CONTEMPORARY / 13",
+    style: "modern",
+    height: 155,
+    price: 106000,
+    model: modelUrl("silent-dialogue.glb"),
+    poster: printablesModelImage(
+      "1248986-abstract-figure-decor-statue",
+      "media/prints/420ced9f-ffed-4fdc-993e-76d1fee67645/images/9374317_ef10366b-4dd3-463a-9112-ebe6890b99ca_73197679-ae6d-4fbc-a525-cdf10d941db5/img_20250329_223435.jpg",
+      "RUMcajz · Printables",
+    ).src,
+    gallery: [
+      printablesModelImage(
+        "1248986-abstract-figure-decor-statue",
+        "media/prints/420ced9f-ffed-4fdc-993e-76d1fee67645/images/9374317_ef10366b-4dd3-463a-9112-ebe6890b99ca_73197679-ae6d-4fbc-a525-cdf10d941db5/img_20250329_223435.jpg",
+        "RUMcajz · Printables",
+      ),
+      printablesModelImage(
+        "1248986-abstract-figure-decor-statue",
+        "media/prints/7933f002-5f0d-4760-befe-1d974bcff782/images/9374318_c44ad305-a37e-4e2f-81d4-3870586bd245_68b25c64-eec5-4602-b8ad-f57cc4ca230c/43.jpg",
+        "RUMcajz · Printables",
+      ),
+      printablesModelImage(
+        "1248986-abstract-figure-decor-statue",
+        "media/prints/0d6e3e23-d2e8-428f-a656-305c834d0e9a/images/9374319_ac2397b9-9fb8-4792-8bcd-1966bcbd343e_942e63d6-a491-49a7-8e0e-4390301def0e/img_20250329_223450.jpg",
+        "RUMcajz · Printables",
+      ),
+    ],
+    exposure: 0.48,
+    initialBackground: "night",
+    color: "Fildişi beyazı / Ivory white",
+    material: "PLA Pro + ipeksi mineral yüzey / PLA Pro + silky mineral finish",
+    leadTime: "24–34 gün / days",
+    description: {
+      tr: "Tek bir akışkan hacim içinde düşünme ve içe dönüş jestini birleştiren çağdaş figür. Fine-dining restoranları, sanat otelleri ve sakin lüks konutlarda heykelsi bir odak olarak büyük ölçekte üretilebilir.",
+      en: "A contemporary figure that unites contemplation and introspection within one flowing volume. Scalable as a sculptural focal point for fine-dining restaurants, art hotels and quietly luxurious residences.",
+    },
+    source: {
+      title: "Abstract Figure Decor Statue",
+      creator: "RUMcajz",
+      licenseName: "CC BY 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+      sourceUrl: "https://www.printables.com/model/1248986-abstract-figure-decor-statue",
+    },
+  },
+  {
+    slug: "contour-fox",
+    name: "Contour Fox — MODERN DECOR / 14",
+    style: "decorative",
+    height: 125,
+    price: 88500,
+    model: modelUrl("contour-fox.glb"),
+    poster: printablesModelImage(
+      "1315737-fox-sculpture-minimalist-organic-design",
+      "media/prints/20f2d7aa-53c9-48fe-a2c5-a1df249cd04f/images/10257761_ae2bc28f-bea1-42ce-bcb1-605359e25513_6d17cb90-fca4-4b0a-9d8e-02c203550ae7/img_9851.jpg",
+      "spezialuniversal · Printables",
+    ).src,
+    gallery: [
+      printablesModelImage(
+        "1315737-fox-sculpture-minimalist-organic-design",
+        "media/prints/20f2d7aa-53c9-48fe-a2c5-a1df249cd04f/images/10257761_ae2bc28f-bea1-42ce-bcb1-605359e25513_6d17cb90-fca4-4b0a-9d8e-02c203550ae7/img_9851.jpg",
+        "spezialuniversal · Printables",
+      ),
+      printablesModelImage(
+        "1315737-fox-sculpture-minimalist-organic-design",
+        "media/prints/5c6150c4-2eac-4789-9925-d48ba66a51b2/previews/ded6d162-900f-4fe8-8a05-32145d55ff3c.png",
+        "spezialuniversal · Printables 3D preview",
+      ),
+    ],
+    exposure: 0.46,
+    initialBackground: "night",
+    color: "Saten siyah / Satin black",
+    material: "PETG + saten metal yüzey / PETG + satin metallic finish",
+    leadTime: "20–30 gün / days",
+    description: {
+      tr: "Tilkinin anatomisini akışkan dikey şeritlere dönüştüren biyomorfik, orta-yüksek detaylı dekor heykeli. Şarap barları, modern restoranlar, otel salonları ve koleksiyoner evleri için güçlü bir siluet sunar.",
+      en: "A biomorphic, mid-to-high-detail decorative sculpture translating a fox anatomy into flowing vertical contours. Its assertive silhouette suits wine bars, modern restaurants, hotel lounges and collectors' homes.",
+    },
+    source: {
+      title: "Fox Sculpture — Minimalist Organic Design",
+      creator: "spezialuniversal",
+      licenseName: "CC BY 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+      sourceUrl: "https://www.printables.com/model/1315737-fox-sculpture-minimalist-organic-design",
+    },
+  },
+  {
+    slug: "ribbon-twist",
+    name: "Ribbon Twist — CONTEMPORARY / 15",
+    style: "modern",
+    height: 145,
+    price: 97500,
+    model: modelUrl("ribbon-twist.glb"),
+    poster: printablesModelImage(
+      "1138685-twist-organic-sculpture-support-free",
+      "media/prints/1138685/images/8592752_2d4b0cf9-6605-493f-9feb-68ce3357de15_9f9a2d0d-b92a-4f93-9cca-952f412a5e18/20250107_0648052.jpg",
+      "Den · Printables",
+    ).src,
+    gallery: [
+      printablesModelImage(
+        "1138685-twist-organic-sculpture-support-free",
+        "media/prints/1138685/images/8592752_2d4b0cf9-6605-493f-9feb-68ce3357de15_9f9a2d0d-b92a-4f93-9cca-952f412a5e18/20250107_0648052.jpg",
+        "Den · Printables",
+      ),
+      printablesModelImage(
+        "1138685-twist-organic-sculpture-support-free",
+        "media/prints/1138685/previews/e5bd8b73898ac752ca947a9accc159cd452c593f.png",
+        "Den · Printables 3D preview",
+      ),
+    ],
+    exposure: 0.48,
+    initialBackground: "night",
+    color: "Mat şampanya / Matte champagne",
+    material: "PLA Pro + ince metalik mineral yüzey / PLA Pro + fine metallic mineral finish",
+    leadTime: "22–32 gün / days",
+    description: {
+      tr: "Birbirine geçen yumuşak şeritlerin negatif boşluklarla dengelendiği organik çağdaş kompozisyon. Konsol masaları, restoran karşılama alanları ve yüksek tavanlı özel konutlar için anıtsal ölçekte uygulanabilir.",
+      en: "An organic contemporary composition of interlocking soft ribbons balanced by negative space. Suitable at monumental scale for console tables, restaurant reception areas and high-ceiling private residences.",
+    },
+    source: {
+      title: "Twist Organic Sculpture",
+      creator: "Den",
+      licenseName: "CC BY 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+      sourceUrl: "https://www.printables.com/model/1138685-twist-organic-sculpture-support-free",
+    },
+  },
+  {
+    slug: "organic-monolith",
+    name: "Organic Monolith — MODERN ART / 16",
+    style: "modern",
+    height: 175,
+    price: 132000,
+    model: modelUrl("organic-monolith.glb"),
+    poster: printablesModelImage(
+      "1136905-organic-sculpture-support-free",
+      "media/prints/1136905/images/8579195_3b232617-1cb9-4473-a37a-cc9b8e526205_49ca7197-0d2b-4fef-a075-6dac33b380f3/20250105_2324404.jpg",
+      "Den · Printables",
+    ).src,
+    gallery: [
+      printablesModelImage(
+        "1136905-organic-sculpture-support-free",
+        "media/prints/1136905/images/8579195_3b232617-1cb9-4473-a37a-cc9b8e526205_49ca7197-0d2b-4fef-a075-6dac33b380f3/20250105_2324404.jpg",
+        "Den · Printables",
+      ),
+      printablesModelImage(
+        "1136905-organic-sculpture-support-free",
+        "media/prints/1136905/previews/40dc8fcfa25803427d24f7a6bd7bf3c749e86e30.png",
+        "Den · Printables 3D preview",
+      ),
+    ],
+    exposure: 0.44,
+    initialBackground: "night",
+    color: "Kömür siyahı / Charcoal black",
+    material: "PETG + mikro dokulu mat yüzey / PETG + micro-textured matte finish",
+    leadTime: "28–40 gün / days",
+    description: {
+      tr: "Oyulmuş iç boşlukları ve kesintisiz kabuğuyla taş ile akışkan metal arasında duran organik bir monolit. Özel yemek salonları, sanat odaklı ofisler ve çağdaş villalarda bağımsız merkez eser olarak tasarlanmıştır.",
+      en: "An organic monolith poised between carved stone and liquid metal, defined by hollowed apertures and a continuous shell. Designed as a standalone centrepiece for private dining rooms, art-led offices and contemporary villas.",
+    },
+    source: {
+      title: "Organic Sculpture",
+      creator: "Den",
+      licenseName: "CC BY-SA 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+      sourceUrl: "https://www.printables.com/model/1136905-organic-sculpture-support-free",
+    },
+  },
+  {
+    slug: "levitation-line",
+    name: "Levitation Line — CONTEMPORARY / 17",
+    style: "modern",
+    height: 185,
+    price: 121000,
+    model: modelUrl("levitation-line.glb"),
+    poster: printablesModelImage(
+      "485566-organic-levitation-sculpture",
+      "media/prints/485566/images/3968684_6b9f606b-cd1e-4f79-9f07-4f0bd305ddd0/2023-05-19-194814dd.jpg",
+      "Triple G Workshop · Printables",
+    ).src,
+    gallery: [
+      printablesModelImage(
+        "485566-organic-levitation-sculpture",
+        "media/prints/485566/images/3968684_6b9f606b-cd1e-4f79-9f07-4f0bd305ddd0/2023-05-19-194814dd.jpg",
+        "Triple G Workshop · Printables",
+      ),
+      printablesModelImage(
+        "485566-organic-levitation-sculpture",
+        "media/prints/485566/images/3966063_784714ee-4dd4-46d1-a051-3029c77ef252/2023-05-19-194820.jpg",
+        "Triple G Workshop · Printables",
+      ),
+      printablesModelImage(
+        "485566-organic-levitation-sculpture",
+        "media/prints/485566/images/3968691_bfabf30a-51f9-408c-a98c-4a5d4eb04af4/2023-05-20-090229.jpg",
+        "Triple G Workshop · Printables",
+      ),
+    ],
+    exposure: 0.47,
+    initialBackground: "night",
+    color: "Fırçalanmış bronz / Brushed bronze",
+    material: "PETG + bronz efektli mineral yüzey / PETG + bronze-effect mineral finish",
+    leadTime: "28–40 gün / days",
+    description: {
+      tr: "İnsan bedenini havada asılı tek bir organik çizgiye indirgeyen çağdaş figüratif kompozisyon. Galeri duvarları, çift yükseklikli restoranlar ve özel yemek salonlarında hafif ama anıtsal bir vurgu yaratır.",
+      en: "A contemporary figurative composition reducing the human body to a single organic line suspended in space. It creates a light yet monumental accent for gallery walls, double-height restaurants and private dining rooms.",
+    },
+    source: {
+      title: "Organic Levitation Sculpture",
+      creator: "Triple G Workshop",
+      licenseName: "CC BY-SA 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+      sourceUrl: "https://www.printables.com/model/485566-organic-levitation-sculpture",
     },
   },
 ];

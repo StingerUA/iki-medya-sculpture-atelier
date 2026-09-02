@@ -48,6 +48,21 @@ download \
 download \
   "https://files.printables.com/media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/stls/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_41bef1fd-807b-4b87-894f-f750187ead26/ataturk_bust_gm.stl" \
   "$MODEL_TMP_DIR/mustafa-kemal-ataturk-bust.stl"
+download \
+  "https://files.printables.com/media/prints/ccbe3c2d-d8fc-4eb7-92d3-946816498ff0/stls/9374316_dac262c3-eb87-4e88-89c7-7e9735bd8b83_f31fc121-783b-45c0-ba1e-33bc1a0199a3/final.obj" \
+  "$MODEL_TMP_DIR/silent-dialogue.obj"
+download \
+  "https://files.printables.com/media/prints/f169c6c7-f1ec-4753-81f4-053246dce947/stls/10141689_9fe99250-4904-43c4-835e-4371c05be4bb_af138c7d-53ed-46f7-bb55-1d07613b2e7e/fox.stl" \
+  "$MODEL_TMP_DIR/contour-fox.stl"
+download \
+  "https://files.printables.com/media/prints/1138685/stls/8592089_497698cf-ce33-4592-a6d2-4d4e4e4c107f_4b0c31de-cbb0-485a-abcc-fa0a89472af5/organicsculpt_tiwst.stl" \
+  "$MODEL_TMP_DIR/ribbon-twist.stl"
+download \
+  "https://files.printables.com/media/prints/1136905/stls/8579178_8082b821-af77-4376-9b45-8af126d76112_c9aada4d-de0f-4c3f-a4fa-b336f0eacfc9/organicsculpt.stl" \
+  "$MODEL_TMP_DIR/organic-monolith.stl"
+download \
+  "https://files.printables.com/media/prints/485566/stls/3965204_e528087a-0a22-48c1-af6c-36109a2dbdf2/organic-levitation.stl" \
+  "$MODEL_TMP_DIR/levitation-line.stl"
 
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb" 32000
@@ -67,6 +82,16 @@ python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/greek-loutrophoros.stl" "$MODEL_DIR/greek-loutrophoros.glb" 100000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/mustafa-kemal-ataturk-bust.stl" "$MODEL_DIR/mustafa-kemal-ataturk-bust.glb" 450000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/silent-dialogue.obj" "$MODEL_DIR/silent-dialogue.glb" 300000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/contour-fox.stl" "$MODEL_DIR/contour-fox.glb" 250000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/ribbon-twist.stl" "$MODEL_DIR/ribbon-twist.glb" 160000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/organic-monolith.stl" "$MODEL_DIR/organic-monolith.glb" 280000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/levitation-line.stl" "$MODEL_DIR/levitation-line.glb" 120000
 
 # Web-optimised CC0 decorative assets from Poly Haven. These GLBs are pinned to
 # the commit that converted the original 1K glTF releases into self-contained files.
