@@ -63,16 +63,16 @@ export const products: Product[] = [
     price: 118000,
     model: modelUrl("mustafa-kemal-ataturk-bust.glb"),
     poster: printablesImage(
-      "media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/images/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_a3a90be3-fc58-4a4a-91ce-65e8e1f80ef7/23cb0bf819b1114ed7ece0654b303225.png",
+      "media/prints/b2d797cf-d9c4-4f01-a7d0-abb71add54c6/images/10940750_c0a400e0-ccb4-4f91-bb65-02be73363737_62fd3815-5b01-4e1b-ba33-e6596904606e/img_20251008_113738.jpg",
       "OzzyOzil · Printables",
     ).src,
     gallery: [
       printablesImage(
-        "media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/images/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_a3a90be3-fc58-4a4a-91ce-65e8e1f80ef7/23cb0bf819b1114ed7ece0654b303225.png",
+        "media/prints/b2d797cf-d9c4-4f01-a7d0-abb71add54c6/images/10940750_c0a400e0-ccb4-4f91-bb65-02be73363737_62fd3815-5b01-4e1b-ba33-e6596904606e/img_20251008_113738.jpg",
         "OzzyOzil · Printables",
       ),
       printablesImage(
-        "media/prints/b2d797cf-d9c4-4f01-a7d0-abb71add54c6/images/10940750_c0a400e0-ccb4-4f91-bb65-02be73363737_62fd3815-5b01-4e1b-ba33-e6596904606e/img_20251008_113738.jpg",
+        "media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/images/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_a3a90be3-fc58-4a4a-91ce-65e8e1f80ef7/23cb0bf819b1114ed7ece0654b303225.png",
         "OzzyOzil · Printables",
       ),
       printablesImage(
@@ -80,7 +80,7 @@ export const products: Product[] = [
         "OzzyOzil · Printables",
       ),
     ],
-    orientation: "90deg 90deg 0deg",
+    orientation: "90deg 180deg 0deg",
     exposure: 0.36,
     initialBackground: "night",
     color: "Mat bronz / Matte bronze",
