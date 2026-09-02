@@ -50,7 +50,7 @@ const polyHavenImage = (asset: string, view: "primary" | "clay" | "orth_front", 
 
 const printablesImage = (filePath: string, credit: string): GalleryImage => ({
   src: `https://media.printables.com/${filePath}`,
-  sourceUrl: "https://www.printables.com/model/660023-ataturk",
+  sourceUrl: "https://www.printables.com/model/1451449-ataturk-bust",
   credit,
 });
 
@@ -63,21 +63,21 @@ export const products: Product[] = [
     price: 118000,
     model: modelUrl("mustafa-kemal-ataturk-bust.glb"),
     poster: printablesImage(
-      "media/prints/660023/images/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_17f72e37-9786-499a-8198-5cb34d435aa9/ataturk_ayhan_celik_3d02.png",
-      "Ayhan ÇELİK · Printables",
+      "media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/images/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_a3a90be3-fc58-4a4a-91ce-65e8e1f80ef7/23cb0bf819b1114ed7ece0654b303225.png",
+      "OzzyOzil · Printables",
     ).src,
     gallery: [
       printablesImage(
-        "media/prints/660023/images/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_17f72e37-9786-499a-8198-5cb34d435aa9/ataturk_ayhan_celik_3d02.png",
-        "Ayhan ÇELİK · Printables",
+        "media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/images/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_a3a90be3-fc58-4a4a-91ce-65e8e1f80ef7/23cb0bf819b1114ed7ece0654b303225.png",
+        "OzzyOzil · Printables",
       ),
       printablesImage(
-        "media/prints/660023/images/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_44c297e9-769c-4c3f-9106-521d24251b2d/ataturk_ayhan_celik_3d01.png",
-        "Ayhan ÇELİK · Printables",
+        "media/prints/b2d797cf-d9c4-4f01-a7d0-abb71add54c6/images/10940750_c0a400e0-ccb4-4f91-bb65-02be73363737_62fd3815-5b01-4e1b-ba33-e6596904606e/img_20251008_113738.jpg",
+        "OzzyOzil · Printables",
       ),
       printablesImage(
-        "media/prints/660023/images/5412158_48bc9e99-2b84-4851-8bc7-8c8ca8b5ac52_737674c1-a45b-4c40-a769-10382460a7da/ata.jpg",
-        "Ayhan ÇELİK · Printables",
+        "media/prints/6cf62745-1ecc-45e1-9fba-76135fdb280c/images/10940751_7d354999-f2c2-41c5-952d-c6b7f0f1e469_b318ce23-39fa-4d4d-899d-2bd8b1241b96/img_20251008_113619.jpg",
+        "OzzyOzil · Printables",
       ),
     ],
     orientation: "90deg 90deg 0deg",
@@ -87,15 +87,15 @@ export const products: Product[] = [
     material: "PLA Pro + tek renk mineral yüzey / PLA Pro + monochrome mineral finish",
     leadTime: "22–32 gün / days",
     description: {
-      tr: "Mustafa Kemal Atatürk'ü askerî üniforması ve kalpağıyla betimleyen yüksek detaylı anıtsal büst. Kurumsal girişler, kültür merkezleri, restoranlar, oteller ve özel koleksiyonlar için büyük ölçekte üretilebilir.",
-      en: "A high-detail monumental bust portraying Mustafa Kemal Atatürk in military uniform and kalpak. Scalable for corporate entrances, cultural centres, restaurants, hotels and private collections.",
+      tr: "Mustafa Kemal Atatürk'ü takım elbisesiyle betimleyen temiz siluetli, yüksek detaylı anıtsal büst. Kurumsal girişler, kültür merkezleri, restoranlar, oteller ve özel koleksiyonlar için büyük ölçekte üretilebilir.",
+      en: "A high-detail monumental bust portraying Mustafa Kemal Atatürk in a formal suit with a clean architectural silhouette. Scalable for corporate entrances, cultural centres, restaurants, hotels and private collections.",
     },
     source: {
-      title: "Ataturk — Mustafa Kemal Atatürk Bust",
-      creator: "Ayhan ÇELİK",
+      title: "Atatürk Büst — Mustafa Kemal Atatürk Bust",
+      creator: "OzzyOzil",
       licenseName: "Creative Commons Public Domain",
       licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
-      sourceUrl: "https://www.printables.com/model/660023-ataturk",
+      sourceUrl: "https://www.printables.com/model/1451449-ataturk-bust",
     },
   },
   {
@@ -317,7 +317,7 @@ export const products: Product[] = [
       polyHavenImage("horse_head", "clay", "Tina · Poly Haven"),
       polyHavenImage("horse_head", "orth_front", "Tina · Poly Haven"),
     ],
-    orientation: "0deg -90deg 0deg",
+    orientation: "90deg 90deg 0deg",
     initialBackground: "night",
     color: "Eskitilmiş bronz / Aged bronze",
     material: "PETG + metal efektli mineral yüzey / PETG + metallic mineral finish",

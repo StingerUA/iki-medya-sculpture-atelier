@@ -46,7 +46,7 @@ download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Loutrophoros.stl" \
   "$MODEL_TMP_DIR/greek-loutrophoros.stl"
 download \
-  "https://files.printables.com/media/prints/660023/stls/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_6b1717b0-7378-4fab-ae7a-5736d8186462/ataturk_ayhan_celik_3d.stl" \
+  "https://files.printables.com/media/prints/4f6d4b94-fa96-4907-ba44-ddeb9516ad68/stls/10940742_a124d34b-578c-4f7f-a663-a37a8d4df865_41bef1fd-807b-4b87-894f-f750187ead26/ataturk_bust_gm.stl" \
   "$MODEL_TMP_DIR/mustafa-kemal-ataturk-bust.stl"
 
 python3 scripts/convert-sculpture.py \
