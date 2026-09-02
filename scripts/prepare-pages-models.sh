@@ -45,6 +45,9 @@ download \
 download \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/3D_Model_Loutrophoros.stl" \
   "$MODEL_TMP_DIR/greek-loutrophoros.stl"
+download \
+  "https://files.printables.com/media/prints/660023/stls/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_6b1717b0-7378-4fab-ae7a-5736d8186462/ataturk_ayhan_celik_3d.stl" \
+  "$MODEL_TMP_DIR/mustafa-kemal-ataturk-bust.stl"
 
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/venus-de-milo.obj" "$MODEL_DIR/venus-de-milo.glb" 32000
@@ -62,6 +65,8 @@ python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/greek-hydria.stl" "$MODEL_DIR/greek-hydria.glb" 100000
 python3 scripts/convert-sculpture.py \
   "$MODEL_TMP_DIR/greek-loutrophoros.stl" "$MODEL_DIR/greek-loutrophoros.glb" 100000
+python3 scripts/convert-sculpture.py \
+  "$MODEL_TMP_DIR/mustafa-kemal-ataturk-bust.stl" "$MODEL_DIR/mustafa-kemal-ataturk-bust.glb" 450000
 
 # Web-optimised CC0 decorative assets from Poly Haven. These GLBs are pinned to
 # the commit that converted the original 1K glTF releases into self-contained files.

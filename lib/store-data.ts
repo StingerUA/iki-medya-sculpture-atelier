@@ -16,6 +16,7 @@ export type Product = {
   poster: string;
   gallery: GalleryImage[];
   orientation?: string;
+  exposure?: number;
   initialBackground?: "studio" | "stone" | "night";
   color: string;
   material: string;
@@ -47,7 +48,56 @@ const polyHavenImage = (asset: string, view: "primary" | "clay" | "orth_front", 
   credit,
 });
 
+const printablesImage = (filePath: string, credit: string): GalleryImage => ({
+  src: `https://media.printables.com/${filePath}`,
+  sourceUrl: "https://www.printables.com/model/660023-ataturk",
+  credit,
+});
+
 export const products: Product[] = [
+  {
+    slug: "mustafa-kemal-ataturk-bust",
+    name: "Mustafa Kemal Atatürk Bust — HERITAGE / 12",
+    style: "modern",
+    height: 135,
+    price: 118000,
+    model: modelUrl("mustafa-kemal-ataturk-bust.glb"),
+    poster: printablesImage(
+      "media/prints/660023/images/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_17f72e37-9786-499a-8198-5cb34d435aa9/ataturk_ayhan_celik_3d02.png",
+      "Ayhan ÇELİK · Printables",
+    ).src,
+    gallery: [
+      printablesImage(
+        "media/prints/660023/images/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_17f72e37-9786-499a-8198-5cb34d435aa9/ataturk_ayhan_celik_3d02.png",
+        "Ayhan ÇELİK · Printables",
+      ),
+      printablesImage(
+        "media/prints/660023/images/5200732_b2d6ae95-362b-41f2-997b-847d82d9d866_44c297e9-769c-4c3f-9106-521d24251b2d/ataturk_ayhan_celik_3d01.png",
+        "Ayhan ÇELİK · Printables",
+      ),
+      printablesImage(
+        "media/prints/660023/images/5412158_48bc9e99-2b84-4851-8bc7-8c8ca8b5ac52_737674c1-a45b-4c40-a769-10382460a7da/ata.jpg",
+        "Ayhan ÇELİK · Printables",
+      ),
+    ],
+    orientation: "90deg 90deg 0deg",
+    exposure: 0.36,
+    initialBackground: "night",
+    color: "Mat bronz / Matte bronze",
+    material: "PLA Pro + tek renk mineral yüzey / PLA Pro + monochrome mineral finish",
+    leadTime: "22–32 gün / days",
+    description: {
+      tr: "Mustafa Kemal Atatürk'ü askerî üniforması ve kalpağıyla betimleyen yüksek detaylı anıtsal büst. Kurumsal girişler, kültür merkezleri, restoranlar, oteller ve özel koleksiyonlar için büyük ölçekte üretilebilir.",
+      en: "A high-detail monumental bust portraying Mustafa Kemal Atatürk in military uniform and kalpak. Scalable for corporate entrances, cultural centres, restaurants, hotels and private collections.",
+    },
+    source: {
+      title: "Ataturk — Mustafa Kemal Atatürk Bust",
+      creator: "Ayhan ÇELİK",
+      licenseName: "Creative Commons Public Domain",
+      licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
+      sourceUrl: "https://www.printables.com/model/660023-ataturk",
+    },
+  },
   {
     slug: "venus-de-milo",
     name: "Venus de Milo — CLASSICS / 01",
