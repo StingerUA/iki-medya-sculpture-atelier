@@ -232,7 +232,7 @@ button { cursor: pointer; }
 .hero-copy { display: flex; flex-direction: column; justify-content: center; padding: 70px clamp(24px, 6vw, 95px); border-right: 1px solid #0a0a0a; }
 .hero-copy h1 { margin: 42px 0 28px; font-size: clamp(4.5rem, 9vw, 10rem); font-weight: 900; letter-spacing: -.075em; line-height: .77; }
 .hero-title-line { display: block; }
-.hero-title-line + .hero-title-line { margin-top: .1em; }
+.hero-title-line + .hero-title-line { margin-top: .2em; }
 .hero-text { max-width: 610px; margin: 0; font-size: clamp(1rem, 1.35vw, 1.28rem); line-height: 1.55; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: 0; margin-top: 42px; }
 .square-button { min-height: 48px; border-radius: 0 !important; border-color: #0a0a0a !important; padding-inline: 20px; font-size: .75rem; font-weight: 800; letter-spacing: .045em; }
