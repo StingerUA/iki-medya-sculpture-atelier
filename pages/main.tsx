@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { StoreApp } from "@/components/store-app";
+import { StoreEnhancements } from "@/components/store-enhancements";
 import "@/app/globals.css";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -9,5 +10,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <StoreApp initialPath="/tr" />
+    <StoreEnhancements />
   </React.StrictMode>,
 );
